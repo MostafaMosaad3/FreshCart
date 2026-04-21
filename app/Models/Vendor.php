@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Vendor extends Model
+{
+    /** @use HasFactory<\Database\Factories\VendorFactory> */
+    use HasFactory;
+
+    protected $guarded = [];
+
+    // Relations
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+
+    // Local Scopes
+    public function scopeIsVerified(Builder $query): Builder
+    {
+        return $query->where('is_verified', true);
+    }
+
+    public function scopeIsNotVerified(Builder $query): Builder
+    {
+        return $query->where('is_verified', false);
+    }
+
+    public function scopeWithProducts(Builder $query): Builder
+    {
+        return $query->has('products');
+    }
+
+
+}
