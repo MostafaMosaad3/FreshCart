@@ -50,6 +50,11 @@ class Product extends Model
         return $query->whereHas('vendor', fn($q) => $q->where('is_verified', true));
     }
 
+    public function scopeFromUnVerifiedVerdor(Builder $query): Builder
+    {
+        return $query->whereHas('vendor', fn($q) => $q->where('is_verified', false));
+    }
+
     public function scopeMinPrice(Builder $query, float $min): Builder
     {
         return $query->where('price', '>=', $min);

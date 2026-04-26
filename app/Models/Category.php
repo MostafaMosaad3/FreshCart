@@ -39,4 +39,9 @@ class Category extends Model
     {
         return $query->has('products');
     }
+
+    public function scopeTopLevel(Builder $query): Builder
+    {
+        return $query->whereNull('parent_id');
+    }
 }

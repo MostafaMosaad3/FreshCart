@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Product>
@@ -17,8 +19,29 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+
+        $name = $this->faker->words(3, true);
+
         return [
-            //
+            'vendor_id' => Vendor::factory() ,
+            'name' => $name,
+            'slug' => Str::slug($name) . '-' . Str::random(3),
+            'description' => $this->faker->paragraph(),
+            'price'=> $this->faker->randomFloat(2, 10),
+            'status'=> 'draft' ,
+            'is_featured' => false,
         ];
+    }
+
+
+    public function featured() :static
+    {
+        return $this->state(fn() => ['is_featured' => true]);
+    }
+
+
+    public function active() :static
+    {
+        return $this->state(fn() => ['status' => 'active']);
     }
 }

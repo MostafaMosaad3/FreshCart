@@ -28,6 +28,11 @@ class Vendor extends Model
 
 
     // Local Scopes
+    public function scopeVerified(Builder $query): Builder
+    {
+        return $query->where('is_verified', true);
+    }
+
     public function scopeIsVerified(Builder $query): Builder
     {
         return $query->where('is_verified', true);
