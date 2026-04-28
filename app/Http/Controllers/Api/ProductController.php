@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Products\StoreProductRequest;
+use App\Http\Requests\Products\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -39,37 +41,32 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function store(Request $request)
+
+    public function store(StoreProductRequest $request)
     {
-        $this->authorize('create', Product::class);
+        $data = $request->validated();
+        $categoryIds = $data['category_ids'];
+        unset($data['category_ids']);
 
-        $data = $request->validate([
-            'name'        => ['required', 'string', 'max:255'],
-            'slug'        => ['required', 'string', 'unique:products,slug'],
-            'description' => ['required', 'string'],
-            'price'       => ['required', 'numeric', 'min:0'],
-        ]);
+        $product = $request->user()->vendor->products()->create($data);
+        $product->categories()->sync($categoryIds);
 
-        $product = $request->user()->vendor->products()->create($data + ['status' => 'draft']);
-
-        return new ProductResource($product);
+        return new ProductResource($product->load(['vendor', 'categories']));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $this->authorize('update', $product);
-
-
-        $data = $request->validate([
-            'name'        => ['sometimes', 'string', 'max:255'],
-            'description' => ['sometimes', 'string'],
-            'price'       => ['sometimes', 'numeric', 'min:0'],
-            'status'      => ['sometimes', 'in:active,draft,inactive'],
-        ]);
+        $data = $request->validated();
+        $categoryIds = $data['category_ids'] ?? null;
+        unset($data['category_ids']);
 
         $product->update($data);
 
-        return new ProductResource($product);
+        if ($categoryIds !== null) {
+            $product->categories()->sync($categoryIds);
+        }
+
+        return new ProductResource($product->fresh(['vendor', 'categories']));
     }
 
     public function destroy(Product $product)

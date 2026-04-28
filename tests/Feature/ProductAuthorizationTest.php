@@ -66,7 +66,7 @@ class ProductAuthorizationTest extends TestCase
             ->putJson("api/products/{$omarProduct->id}" , ['name' => 'renamed by Sare']) ;
 
         $response->assertForbidden();
-        $response->assertNotSame('Hacked By Sare' . $product->fresh()->name);
+        $response->assertNotSame('Hacked By Sare' . $omarProduct->fresh()->name);
     }
 
     public function test_customer_cannot_create_products(): void
@@ -110,5 +110,7 @@ class ProductAuthorizationTest extends TestCase
         $vendorIds = collect($response->json('data'))->pluck('vendor.id')->unique()->values()->toArray();
         $this->assertSame([$saraVendor->id], $vendorIds);
     }
+
+
 
 }
