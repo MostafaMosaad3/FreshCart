@@ -17,7 +17,7 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'slug' => $this->Slug,
+            'slug' => $this->slug,
             'price' => (float)$this->price ,
             'currency' => 'EGP' ,
             'has_discount' => $this->compare_price !== null ,

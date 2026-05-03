@@ -49,7 +49,7 @@ class ProductValidationTest extends TestCase
 
         $this->withHeaders($this->authed($user))
             ->postJson('/api/products', [])
-            ->assertJsonValidationErrors(['name', 'slug', 'description', 'price', 'category_ids']);
+            ->assertJsonValidationErrors(['name', 'price', 'category_ids']);
 
     }
 

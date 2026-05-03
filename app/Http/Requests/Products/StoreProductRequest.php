@@ -5,6 +5,7 @@ namespace App\Http\Requests\Products;
 use App\Models\Product;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
@@ -21,9 +22,10 @@ class StoreProductRequest extends FormRequest
     {
         $this->merge([
             'name'        => trim((string) $this->name),
-            'description' => trim((string) $this->description),
+            'description' => trim((string) ($this->description ?? '')),
             'price'       => $this->price !== null ? (float) $this->price : null,
             'status'      => $this->status ?? 'draft',
+            'slug'        => $this->slug ?? Str::slug($this->name) . '-' . Str::random(6),
         ]);
     }
 
@@ -37,7 +39,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name'          => ['required', 'string', 'max:255'],
             'slug'          => ['required', 'string', 'max:255', Rule::unique('products', 'slug')],
-            'description'   => ['required', 'string'],
+            'description'   => ['nullable', 'string'],
             'price'         => ['required', 'numeric', 'min:0'],
             'compare_price' => ['nullable', 'numeric', 'gt:price'],
             'status'        => ['sometimes', Rule::in(['active', 'draft', 'inactive'])],

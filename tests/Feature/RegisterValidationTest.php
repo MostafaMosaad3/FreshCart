@@ -27,7 +27,7 @@ class RegisterValidationTest extends TestCase
             'name' => 'test' ,
             'password' => 'password' ,
             'password_confirmation' => 'password' ,
-        ])->assertStatus(422)->assertValidationsErrors('email');
+        ])->assertStatus(422)->assertJsonValidationErrors('email');
     }
 
     public function test_rejects_an_invalid_email_format() : void

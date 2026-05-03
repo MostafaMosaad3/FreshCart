@@ -27,7 +27,7 @@ class ProductFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name) . '-' . Str::random(3),
             'description' => $this->faker->paragraph(),
-            'price'=> $this->faker->randomFloat(2, 10),
+            'price'=> $this->faker->randomFloat(2, 1, 9999),
             'status'=> 'draft' ,
             'is_featured' => false,
         ];

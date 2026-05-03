@@ -6,67 +6,56 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProductAuthorizationTest extends TestCase
 {
-
-    use RefreshDatabase;    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
+    use RefreshDatabase;
 
     private function tokenFor(User $user): string
     {
         return $user->createToken('test')->plainTextToken;
     }
 
-    public function test_admin_can_update_anyProduct() : void
+    public function test_admin_can_update_anyProduct(): void
     {
-        $user = User::factory()->admin()->create();
-        $vendor = Vendor::factory()->create() ;
+        $user    = User::factory()->admin()->create();
+        $vendor  = Vendor::factory()->create();
         $product = Product::factory()->for($vendor)->create();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($user))
-            ->putJson("api/products/{$product->id}" , ['name' => 'renamed by admin']) ;
+            ->putJson("/api/products/{$product->id}", ['name' => 'renamed by admin']);
 
-        $response->assertOk() ;
-        $this->assertSame('Renamed by admin', $product->fresh()->name);
+        $response->assertOk();
+        $this->assertSame('renamed by admin', $product->fresh()->name);
     }
 
-
-    public function test_vendor_can_update_thier_own_product() : void
+    public function test_vendor_can_update_their_own_product(): void
     {
-        $user = User::factory()->vendor()->create() ;
-        $vendor = Vendor::factory()->for($user)->create() ;
-        $product = Product::factory()->for($vendor)->create() ;
+        $user    = User::factory()->vendor()->create();
+        $vendor  = Vendor::factory()->for($user)->create();
+        $product = Product::factory()->for($vendor)->create();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($user))
-            ->putJson("api/products/ {$product->id}" , ['name' => 'renamed by vendor']) ;
+            ->putJson("/api/products/{$product->id}", ['name' => 'renamed by vendor']);
 
-        $response->assertOk() ;
+        $response->assertOk();
     }
 
-    public function test_vendor_cannot_update_another_vendors_product() : void
+    public function test_vendor_cannot_update_another_vendors_product(): void
     {
-        $sara = User::factory()->vendor()->create() ;
-        $saraVendor = Vendor::factory()->for($sara)->create() ;
+        $sara        = User::factory()->vendor()->create();
+        $saraVendor  = Vendor::factory()->for($sara)->create();
 
-        $omar = User::factory()->vendor()->create() ;
-        $omarVendor = Vendor::factory()->for($omar)->create() ;
-        $omarProduct = Product::factory()->for($omarVendor)->create() ;
+        $omar        = User::factory()->vendor()->create();
+        $omarVendor  = Vendor::factory()->for($omar)->create();
+        $omarProduct = Product::factory()->for($omarVendor)->create();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($sara))
-            ->putJson("api/products/{$omarProduct->id}" , ['name' => 'renamed by Sare']) ;
+            ->putJson("/api/products/{$omarProduct->id}", ['name' => 'renamed by Sara']);
 
         $response->assertForbidden();
-        $response->assertNotSame('Hacked By Sare' . $omarProduct->fresh()->name);
+        $this->assertNotSame('renamed by Sara', $omarProduct->fresh()->name);
     }
 
     public function test_customer_cannot_create_products(): void
@@ -110,7 +99,4 @@ class ProductAuthorizationTest extends TestCase
         $vendorIds = collect($response->json('data'))->pluck('vendor.id')->unique()->values()->toArray();
         $this->assertSame([$saraVendor->id], $vendorIds);
     }
-
-
-
 }

@@ -56,5 +56,10 @@ class DatabaseSeeder extends Seeder
             ['product_id' => $case,    'category_id' => $phones],
             ['product_id' => $screen,  'category_id' => $phones],
         ]);
+
+        $this->call([
+            BulkProductSeeder::class,
+        ]);
     }
+
 }
