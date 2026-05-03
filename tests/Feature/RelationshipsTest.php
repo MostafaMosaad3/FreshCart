@@ -47,6 +47,7 @@ class RelationshipsTest extends TestCase
         $this->assertInstanceOf(Vendor::class , $product->vendor) ;
     }
 
+
     public function test_product_belongs_to_many_categories_via_pivot(): void
     {
         $product = Product::factory()->create() ;

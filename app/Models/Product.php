@@ -70,12 +70,20 @@ class Product extends Model
         return $query->whereBetween('price', [$min, $max]);
     }
 
+    public function scopeForCurrentVendor(Builder $query): Builder
+    {
+        $vendor = auth()->user()?->vendor;
+
+        return $vendor
+            ? $query->where('vendor_id', $vendor->id)
+            : $query->whereRaw('1 = 0');   // no vendor → no rows (safer than returning all)
+    }
 
     // Global Scope
-    protected static function booted()
-    {
-        static::addGlobalScope(new VendorOwnerScope()) ;
-    }
+//    protected static function booted()
+//    {
+//        static::addGlobalScope(new VendorOwnerScope()) ;
+//    }
 
     // Bypass The Global Scope
     protected static function allVendors(Builder $query): Builder

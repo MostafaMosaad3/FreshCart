@@ -42,6 +42,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'string'
         ];
     }
 
@@ -49,5 +50,20 @@ class User extends Authenticatable
     public function vendor(): HasOne
     {
         return $this->hasOne(Vendor::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isVendor(): bool
+    {
+        return $this->role ==='vendor';
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
     }
 }

@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $ahmed = User::create(['name' => 'Ahmed', 'email' => 'ahmed@freshcart.test', 'password' => bcrypt('password')]);
-        $sara  = User::create(['name' => 'Sara',  'email' => 'sara@freshcart.test',  'password' => bcrypt('password')]);
-        $omar  = User::create(['name' => 'Omar',  'email' => 'omar@freshcart.test',  'password' => bcrypt('password')]);
-        $tarek = User::create(['name' => 'Tarek', 'email' => 'tarek@freshcart.test', 'password' => bcrypt('password')]);
+        $ahmed = User::create(['name' => 'Ahmed', 'email' => 'ahmed@freshcart.test', 'password' => bcrypt('password') , 'role' => 'admin']);
+        $sara  = User::create(['name' => 'Sara',  'email' => 'sara@freshcart.test',  'password' => bcrypt('password') , 'role' => 'vendor']);
+        $omar  = User::create(['name' => 'Omar',  'email' => 'omar@freshcart.test',  'password' => bcrypt('password') , 'role' => 'vendor']);
+        $tarek = User::create(['name' => 'Tarek', 'email' => 'tarek@freshcart.test', 'password' => bcrypt('password') , 'role' => 'customer']);
 
         $saraVendor = DB::table('vendors')->insertGetId([
             'user_id' => $sara->id, 'store_name' => "Sara's Gourmet", 'slug' => 'saras-gourmet',
@@ -56,5 +56,10 @@ class DatabaseSeeder extends Seeder
             ['product_id' => $case,    'category_id' => $phones],
             ['product_id' => $screen,  'category_id' => $phones],
         ]);
+
+        $this->call([
+            BulkProductSeeder::class,
+        ]);
     }
+
 }
