@@ -44,4 +44,18 @@ class ProductFactory extends Factory
     {
         return $this->state(fn() => ['status' => 'active']);
     }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Product $product) {
+            $product->variants()->create([
+                'sku'        => "SKU-{$product->id}-DEFAULT",
+                'name'       => 'Default',
+                'attributes' => [],
+                'price'      => $product->price,
+                'stock'      => fake()->numberBetween(0, 50),
+                'version'    => 0,
+            ]);
+        });
+    }
 }
