@@ -10,12 +10,21 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Pricing\BasePrice;
+use App\Pricing\PriceCalculatorInterface;
+use App\Pricing\PriceContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
+
+    public function __construct(
+        private PriceCalculatorInterface $calculator
+    ) {}
+
+
     public function place(PlaceOrderRequest $request)
     {
         $user = $request->user();
@@ -52,17 +61,22 @@ class CheckoutController extends Controller
 
 
             // create the order + items
-            $subtotal = $cart->items->sum(fn($item) => $item->unit_price * $item->quantity);
+            $context = $this->calculator->calculate(new PriceContext(
+                items:   $cart->items,
+                address: $user->defaultAddress,
+                coupon:  null,
+            ));
 
             $order = Order::create([
                 'user_id'      => $user->id,
                 'order_number' => $this->generateOrderNumber(),
                 'status'       => 'pending',
-                'subtotal'     => $subtotal,
-                'tax'          => 0,
-                'shipping'     => 0,
-                'discount'     => 0,
-                'total'        => $subtotal,
+                'subtotal'     => $context->subtotal,
+                'tax'          => $context->tax,
+                'shipping'     => $context->shipping,
+                'discount'     => $context->discount,
+                'total'        => $context->total(),
+                'shipping_address_id' => $user->defaultAddress?->id,
                 'placed_at'    => now(),
             ]);
 

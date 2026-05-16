@@ -59,6 +59,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             BulkProductSeeder::class,
+            CouponSeeder::class,
         ]);
     }
 

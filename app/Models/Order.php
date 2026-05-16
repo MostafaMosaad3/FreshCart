@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    protected $guarded = [];
+    protected $guarded = [ ];
 
     protected $casts = [
         'subtotal'  => 'decimal:2',
