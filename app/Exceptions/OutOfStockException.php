@@ -2,17 +2,20 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
-class OutOfStockException extends Exception
+class OutOfStockException extends CheckoutException
 {
     public function __construct(string $variantName = 'item')
     {
         parent::__construct("Not enough stock for {$variantName}.");
     }
 
-    public function render()
+    public function statusCode(): int
     {
-        return response()->json(['message' => $this->getMessage()], 409);
+        return 422;
+    }
+
+    public function errorCode(): string
+    {
+        return 'out_of_stock';
     }
 }
