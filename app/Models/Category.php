@@ -11,14 +11,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
-
-    protected $depth = 0 ;
+    use HasRecursiveRelationships;
 
     protected static function booted(): void
     {
@@ -131,16 +132,30 @@ class Category extends Model
 
     public function getBreadcrumbs(): Collection
     {
-        $chain = collect([$this]);
-        $cursor = $this->parent ;
+        return $this->ancestorsAndSelf()
+            ->orderBy($this->getDepthName())
+            ->get();
+    }
 
-        while($cursor)
-        {
-            $chain->prepend($cursor);
-            $cursor = $cursor->parent;
-        }
+    public function getDescendantIds(): array
+    {
+        return $this->descendantsAndSelf()
+            ->pluck('id')
+            ->all();
+    }
 
-        return $chain;
+    public static function rawDescendantIds(int $id): array
+    {
+        $rows = DB::select(
+            'WITH RECURSIVE d AS (
+                SELECT id FROM categories WHERE id = ?
+                UNION ALL
+                SELECT c.id FROM categories c INNER JOIN d ON c.parent_id = d.id
+            ) SELECT id FROM d',
+            [$id]
+        );
+
+        return array_map(static fn ($row) => (int) $row->id, $rows);
     }
 
 

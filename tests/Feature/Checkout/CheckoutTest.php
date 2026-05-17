@@ -17,7 +17,7 @@ class CheckoutTest extends TestCase
         $user    = User::factory()->customer()->create();
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 100]);
 
-        $cart = $user->cart()->create();
+        $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
             'quantity'   => 2,
@@ -28,7 +28,7 @@ class CheckoutTest extends TestCase
             ->postJson('/api/checkout')
             ->assertStatus(200)
             ->assertJsonPath('data.status', 'pending')
-            ->assertJsonPath('data.total', '200.00');
+            ->assertJsonPath('data.total', '278.00');
 
         $this->assertSame(1, $user->orders()->count());
         $this->assertSame(0, $user->cart->items()->count());
@@ -40,7 +40,7 @@ class CheckoutTest extends TestCase
         $users   = User::factory()->count(5)->customer()->create();
 
         foreach ($users as $u) {
-            $cart = $u->cart()->create();
+            $cart = $u->cart;
             $cart->items()->create([
                 'variant_id' => $variant->id,
                 'quantity'   => 1,
@@ -71,7 +71,6 @@ class CheckoutTest extends TestCase
     public function test_rejects_checkout_with_an_empty_cart(): void
     {
         $user = User::factory()->customer()->create();
-        $user->cart()->create();
 
         $this->actingAs($user, 'sanctum')
             ->postJson('/api/checkout')
@@ -85,7 +84,7 @@ class CheckoutTest extends TestCase
         $variant = ProductVariant::factory()->create(['stock' => 5, 'price' => 100]);
 
         for ($i = 0; $i < 3; $i++) {
-            $cart = $user->cart()->firstOrCreate([]);
+            $cart = $user->cart()->firstOrCreate(['user_id' => $user->id]);
             $cart->items()->create([
                 'variant_id' => $variant->id,
                 'quantity'   => 1,

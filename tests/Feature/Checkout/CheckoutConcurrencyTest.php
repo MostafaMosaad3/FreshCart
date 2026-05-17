@@ -19,7 +19,7 @@ class CheckoutConcurrencyTest extends TestCase
 
         $users = User::factory()->count(10)->customer()->create();
         foreach ($users as $user) {
-            $cart = $user->cart()->create();
+            $cart = $user->cart;
             $cart->items()->create([
                 'variant_id' => $variant->id,
                 'quantity'   => 1,

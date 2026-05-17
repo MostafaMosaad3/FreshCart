@@ -23,6 +23,11 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
+    protected static function booted(): void
+    {
+        static::created(fn (self $user) => $user->cart()->create());
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -81,5 +86,10 @@ class User extends Authenticatable
     public function defaultAddress(): HasOne
     {
         return $this->hasOne(Address::class)->where('is_default', true);
+    }
+
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
     }
 }

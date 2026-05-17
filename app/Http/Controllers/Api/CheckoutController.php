@@ -29,18 +29,18 @@ use Illuminate\Validation\ValidationException;
 class CheckoutController extends Controller
 {
 
-    public function place(PlaceOrderRequest $request) :OrderResource
+    public function place(PlaceOrderRequest $request)
     {
         $context = DB::transaction(function() use ($request) {
             return app(Pipeline::class)
                 ->send(new CheckoutContext(
                     user: $request->user() ,
-                    idempotencyKey: $request->input('idempotencyKey')
+                    idempotencyKey: $request->input('idempotency_key')
                 ))
                 ->through([
                     ValidateCart::class,
-                    ReserveInventory::class,
                     IdempotencyGuard::class,
+                    ReserveInventory::class,
                     CalculatePrice::class,
                     ProcessPayment::class,
                     CreateOrder::class,
@@ -49,7 +49,9 @@ class CheckoutController extends Controller
                 ->thenReturn();
         } , 3) ;
 
-        return new OrderResource($context->order);
+        return (new OrderResource($context->order))
+            ->response()
+            ->setStatusCode(200);
     }
 
 //    public function __construct(

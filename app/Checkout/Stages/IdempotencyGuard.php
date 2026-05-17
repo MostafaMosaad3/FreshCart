@@ -23,7 +23,9 @@ class IdempotencyGuard
         if($existing)
         {
             $context->order = $existing;
-            return $existing;
+            return $context;
         }
+
+        return $next($context);
     }
 }

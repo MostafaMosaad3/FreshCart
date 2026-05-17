@@ -24,7 +24,7 @@ class FullChainTest extends TestCase
         $variant = ProductVariant::factory()->create(['price' => 100]);
         $user = User::factory()->customer()->create();
 
-        $cart = $user->cart()->create() ;
+        $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
             'quantity' => 10,
@@ -55,7 +55,7 @@ class FullChainTest extends TestCase
         $variant = ProductVariant::factory()->create(['price' => 100]);
         $user    = User::factory()->customer()->create();
 
-        $cart = $user->cart()->create();
+        $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
             'quantity'   => 25,   // subtotal = 2500
@@ -77,7 +77,7 @@ class FullChainTest extends TestCase
         $user    = User::factory()->customer()->create();
         $coupon  = Coupon::factory()->create(['type' => 'percent', 'value' => 10]);
 
-        $cart = $user->cart()->create();
+        $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
             'quantity'   => 10,

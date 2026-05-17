@@ -25,6 +25,10 @@ class ReserveInventory
             if(!$variant){
                 throw new OutOfStockException("Variant #{$item->variant_id} is out of stock.");
             }
+            if($item->quantity > $variant->stock){
+                throw new OutOfStockException($variant->name);
+            }
+            $variant->decrement('stock', $item->quantity);
         }
 
         return $next($context);

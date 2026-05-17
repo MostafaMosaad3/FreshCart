@@ -38,20 +38,27 @@ class CartController extends Controller
 
             $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
 
-            $item = CartItem::updateOrCreate(
-                ['cart_id' => $cart->id, 'variant_id' => $variant->id],
-                [
-                    'quantity'   => DB::raw('COALESCE(quantity, 0) + ' . (int) $data['quantity']),
+            $item = $cart->items()->where('variant_id', $variant->id)->first();
+
+            if ($item) {
+                $item->increment('quantity', (int) $data['quantity']);
+                $item->update(['unit_price' => $variant->price]);
+            } else {
+                $item = $cart->items()->create([
+                    'variant_id' => $variant->id,
+                    'quantity'   => (int) $data['quantity'],
                     'unit_price' => $variant->price,
-                ]
-            );
+                ]);
+            }
 
             $variant->decrement('stock', $data['quantity']);
 
-            return $item->fresh();
+            return $item->fresh(['variant.product']);
         });
 
-        return new CartItemResource($cartItem);
+        return (new CartItemResource($cartItem))
+            ->response()
+            ->setStatusCode(201);
     }
 
 

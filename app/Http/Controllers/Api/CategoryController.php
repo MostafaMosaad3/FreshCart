@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryNestedResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -22,6 +24,19 @@ class CategoryController extends Controller
     {
         $roots = Category::loadTree();
         return CategoryNestedResource::collection($roots);
+    }
+
+    public function products(Category $category)
+    {
+        $categoryIds = $category->getDescendantIds();
+
+        $products = Product::query()
+            ->where('status', 'active')
+            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
+            ->with(['vendor', 'categories'])
+            ->get();
+
+        return ProductResource::collection($products);
     }
 
 

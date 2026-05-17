@@ -60,7 +60,7 @@ class ProductController extends Controller
         $categoryIds = $data['category_ids'] ?? null;
         unset($data['category_ids']);
 
-        $produc2t->update($data);
+        $product->update($data);
 
         if ($categoryIds !== null) {
             $product->categories()->sync($categoryIds);

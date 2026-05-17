@@ -19,7 +19,7 @@ class AddToCartTest extends TestCase
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 10]);
 
         $this->actingAs($user, 'sanctum')
-            ->postJson('api/cart/items', ['variant' => $variant->id, 'quantity' => 1])
+            ->postJson('api/cart/items', ['variant_id' => $variant->id, 'quantity' => 1])
             ->assertStatus(201)
             ->assertJsonPath('data.quantity', 1);
 
@@ -32,11 +32,11 @@ class AddToCartTest extends TestCase
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 10]);
 
         $this->actingAs($user, 'sanctum')
-            ->postJson('api/cart/items', ['variant' => $variant->id, 'quantity' => 1])
+            ->postJson('api/cart/items', ['variant_id' => $variant->id, 'quantity' => 1])
             ->assertStatus(201) ;
 
         $this->actingAs($user, 'sanctum')
-            ->postJson('api/cart/items', ['variant' => $variant->id, 'quantity' => 1])
+            ->postJson('api/cart/items', ['variant_id' => $variant->id, 'quantity' => 1])
             ->assertStatus(201)
             ->assertJsonPath('data.quantity', 2);
 
@@ -50,7 +50,7 @@ class AddToCartTest extends TestCase
         $variant = ProductVariant::factory()->create(['stock' => 3, 'price' => 10]);
 
         $this->actingAs($user, 'sanctum')
-            ->postJson('api/cart/items', ['variant' => $variant->id, 'quantity' => 5])
+            ->postJson('api/cart/items', ['variant_id' => $variant->id, 'quantity' => 5])
             ->assertStatus(422) ;
 
 

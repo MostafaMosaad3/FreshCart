@@ -33,12 +33,11 @@ class ValidateCartTest extends TestCase
     public function test_rejects_when_the_cart_is_empty() :void
     {
         $user = User::factory()->customer()->create() ;
-        $user->cart()->create() ;
 
         $context = new CheckoutContext(user: $user) ;
 
         $this->expectException(ValidationException::class);
-        (new ValidateCart)->handle($ctx, fn($x) => $x);
+        (new ValidateCart)->handle($context, fn($x) => $x);
     }
 
 

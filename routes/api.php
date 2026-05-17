@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -8,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/products',             [ProductController::class, 'index']);
 Route::get('/products/{product:slug}', [ProductController::class, 'show']);
+
+Route::get('/categories/{category}/products', [CategoryController::class, 'products']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/products',             [ProductController::class, 'store']);
@@ -27,4 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/checkout',       [CheckoutController::class, 'place']);
     Route::get('/orders',          [OrderController::class, 'index']);
     Route::get('/orders/{order}',  [OrderController::class, 'show']);
+
+    Route::get('/cart',                  [CartController::class, 'show']);
+    Route::post('/cart/items',           [CartController::class, 'addItem']);
+    Route::put('/cart/items/{item}',     [CartController::class, 'updateQuantity']);
+    Route::delete('/cart/items/{item}',  [CartController::class, 'removeItem']);
 });

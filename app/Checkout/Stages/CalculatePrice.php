@@ -9,7 +9,7 @@ use App\Pricing\PriceContext;
 
 class CalculatePrice
 {
-    public function __construct(PriceCalculatorInterface $calculator)
+    public function __construct(protected PriceCalculatorInterface $calculator)
     {
     }
 

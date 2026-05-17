@@ -68,7 +68,7 @@ class RecursiveCategoryTest extends TestCase
         $directProduct = Product::factory()->for($vendor)->create(['status' => 'active']);
         $nestedProduct = Product::factory()->for($vendor)->create(['status' => 'active']);
 
-        $directProduct->categories->attach($e->id) ;
+        $directProduct->categories()->attach($e->id) ;
         $nestedProduct->categories()->attach($s->id) ;
 
         $response = $this->getJson("/api/categories/{$e->id}/products")->assertOk();

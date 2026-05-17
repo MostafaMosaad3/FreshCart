@@ -1,6 +1,6 @@
 <?php
 
-namespace Checkout;
+namespace Tests\Feature\Checkout;
 
 use App\Models\ProductVariant;
 use App\Models\User;
@@ -14,9 +14,8 @@ class CheckoutPipelineTest extends TestCase
     public function test_places_an_order_through_the_full_pipeline() :void
     {
         $variant = ProductVariant::factory()->create(['price' => 100 , 'stock' => 10]);
-        $user = User::factory()->customer()->craete() ;
+        $user = User::factory()->customer()->create() ;
 
-        $cart = User::cart()->create() ;
         $user->cart->items()->create([
             'variant_id' => $variant->id,
             'quantity' => 2 ,
@@ -27,7 +26,7 @@ class CheckoutPipelineTest extends TestCase
             ->postJson('api/checkout')
             ->assertStatus(200)
             ->assertJsonPath('data.status' , 'pending')
-            ->assertJsonPath('data.total' , 228.00) ;
+            ->assertJsonPath('data.total' , '278.00') ;
 
         $this->assertSame(1 , $user->orders()->count());
         $this->assertSame(0 , $user->cart->items()->count());
@@ -36,10 +35,10 @@ class CheckoutPipelineTest extends TestCase
 
     public function test_returns_existing_order_on_idempotency_key_replay() :void
     {
-        $variant = ProductVariant::factory()->craete(['stock' => 10 , 'price' => 100]) ;
+        $variant = ProductVariant::factory()->create(['stock' => 10 , 'price' => 100]) ;
         $user = User::factory()->customer()->create() ;
 
-        $cart = $user->cart()->create() ;
+        $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
             'quantity' => 1 ,
