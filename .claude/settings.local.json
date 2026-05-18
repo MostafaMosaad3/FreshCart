@@ -2,6 +2,17 @@
   "permissions": {
     "allow": [
       "Bash(php artisan *)",
+      "Bash(git bisect *)",
+      "Bash(git checkout *)",
+      "Bash(tee test_run.log)",
+      "Bash(tee test_run2.log)",
+      "Bash(tee test_run3.log)",
+      "Bash(tee test_run4.log)",
+      "Bash(tee test_run5.log)",
+      "Bash(tee test_run6.log)",
+      "Bash(tee test_run7.log)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
       "Bash(git push *)"
     ]
   }

@@ -3,24 +3,24 @@
 namespace App\Checkout\Stages;
 
 use App\Checkout\CheckoutContext;
+use App\Contracts\PaymentGatewayInterface;
 use App\Exceptions\PaymentDeclinedException;
 
 class ProcessPayment
 {
+    public function __construct(private PaymentGatewayInterface $gateway){}
+
+
     public function handle(CheckoutContext $context , \Closure $next)
     {
-        // Week 5 replaces this with a proper Strategy-based PaymentGateway call.
-        // For today, simulate a successful charge.
-        $context->paymentResult = [
-            'success'        => true,
-            'transaction_id' => 'TEST-' . uniqid(),
-        ];
+        $amountInCents = (int) round($context->priceContext->total() * 100);
 
-        if (!$context->paymentResult['success']) {
-            throw new PaymentDeclinedException();
+        $context->paymentResult = $this->gateway->charge($amountInCents , 'EGY');
+
+        if($context->paymentResult['success']){
+            throw new PaymentDeclinedException($context->paymentResult['reason'] ?? 'Payment Was Declined');
         }
 
         return $next($context);
-
     }
 }

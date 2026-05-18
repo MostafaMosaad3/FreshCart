@@ -22,6 +22,9 @@ class CreateOrder
             'discount'            => $context->priceContext->discount,
             'total'               => $context->priceContext->total(),
             'shipping_address_id' => $context->user->defaultAddress?->id,
+            'transaction_id'      => $context->paymentResult['transaction_id'] ?? null,
+            'gateway'             => config('payment.gateway')  ,
+            'paid_at'             => now() ,
             'placed_at'           => now(),
         ]) ;
 
