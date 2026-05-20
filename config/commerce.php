@@ -6,7 +6,6 @@ return [
     ],
     'shipping' => [
         'free_threshold' => 2000,
-        'flat_rate'      => 50,
+        'flat_rate' => 50,
     ],
-] ;
-
+];

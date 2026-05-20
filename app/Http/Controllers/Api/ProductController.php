@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::with('vendor');
-        $user  = $request->user('sanctum');
+        $user = $request->user('sanctum');
 
         if ($user?->isAdmin()) {
             // admin sees everything
@@ -22,7 +22,7 @@ class ProductController extends Controller
             $query->where('vendor_id', $user->vendor->id);
         } else {
             $query->where('status', 'active')
-                ->whereHas('vendor', fn($q) => $q->where('is_verified', true));
+                ->whereHas('vendor', fn ($q) => $q->where('is_verified', true));
         }
 
         return ProductResource::collection($query->latest()->paginate(15));
@@ -39,7 +39,7 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        $data        = $request->validated();
+        $data = $request->validated();
         $categoryIds = $data['category_ids'] ?? [];
         unset($data['category_ids']);
 
@@ -56,7 +56,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $data        = $request->validated();
+        $data = $request->validated();
         $categoryIds = $data['category_ids'] ?? null;
         unset($data['category_ids']);
 

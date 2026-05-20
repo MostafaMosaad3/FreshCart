@@ -16,12 +16,12 @@ class ProductVariantFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'sku'        => 'SKU-' . Str::upper(Str::random(8)),
-            'name'       => $this->faker->word(),
-            'price'      => $this->faker->randomFloat(2, 1, 9999),
+            'sku' => 'SKU-'.Str::upper(Str::random(8)),
+            'name' => $this->faker->word(),
+            'price' => $this->faker->randomFloat(2, 1, 9999),
             'attributes' => [],
-            'stock'      => $this->faker->numberBetween(0, 100),
-            'version'    => 0,
+            'stock' => $this->faker->numberBetween(0, 100),
+            'version' => 0,
         ];
     }
 }

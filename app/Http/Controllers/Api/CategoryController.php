@@ -7,7 +7,6 @@ use App\Http\Resources\CategoryNestedResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
@@ -15,7 +14,8 @@ class CategoryController extends Controller
     public function tree()
     {
         $flat = Cache::remember('categories.tree.flat.v1', 3360, function () {
-            $roots = Category::loadTree() ;
+            $roots = Category::loadTree();
+
             return self::flatten($roots)->values();
         });
     }
@@ -23,6 +23,7 @@ class CategoryController extends Controller
     public function nested()
     {
         $roots = Category::loadTree();
+
         return CategoryNestedResource::collection($roots);
     }
 
@@ -39,7 +40,6 @@ class CategoryController extends Controller
         return ProductResource::collection($products);
     }
 
-
     protected static function flatten($nodes, $acc = null)
     {
         $acc = $acc ?? collect();
@@ -47,6 +47,7 @@ class CategoryController extends Controller
             $acc->push($node);
             self::flatten($node->children, $acc);
         }
+
         return $acc;
     }
 }

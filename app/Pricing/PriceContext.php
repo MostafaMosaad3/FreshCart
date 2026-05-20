@@ -2,7 +2,6 @@
 
 namespace App\Pricing;
 
-
 use App\Models\Address;
 use App\Models\Coupon;
 use Illuminate\Support\Collection;
@@ -17,12 +16,10 @@ final class PriceContext
         public float $tax = 0.0,
         public float $shipping = 0.0,
         public float $discount = 0.0,
-    ) {
-    }
+    ) {}
 
     public function total(): float
     {
         return round($this->subtotal + $this->tax + $this->shipping - $this->discount, 2);
     }
-
 }

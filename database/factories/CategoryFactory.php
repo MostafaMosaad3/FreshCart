@@ -22,7 +22,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => Str::slug($name) . '-' . Str::random(4),
+            'slug' => Str::slug($name).'-'.Str::random(4),
             'parent_id' => null,
         ];
     }

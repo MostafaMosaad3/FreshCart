@@ -4,5 +4,5 @@ namespace App\Pricing;
 
 interface PriceCalculatorInterface
 {
-    public function calculate(PriceContext $context) :PriceContext;
+    public function calculate(PriceContext $context): PriceContext;
 }

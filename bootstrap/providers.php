@@ -1,9 +1,11 @@
 <?php
 
 use App\Providers\AppServiceProvider;
+use App\Providers\PaymentServiceProvider;
+use App\Providers\PricingServiceProvider;
 
 return [
     AppServiceProvider::class,
-    App\Providers\PricingServiceProvider::class,
-    App\Providers\PaymentServiceProvider::class,
+    PricingServiceProvider::class,
+    PaymentServiceProvider::class,
 ];

@@ -16,8 +16,12 @@ class CheckoutContext
     ) {}
 
     public Cart $cart;
+
     public Collection $lockedVariants;
+
     public PriceContext $priceContext;
+
     public ?array $paymentResult = null;
+
     public Order $order;
 }

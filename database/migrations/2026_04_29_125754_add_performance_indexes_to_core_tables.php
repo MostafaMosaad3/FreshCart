@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->index(['status' , 'created_at'] , 'products_status_created_at_idx');
+            $table->index(['status', 'created_at'], 'products_status_created_at_idx');
 
-            $table->index(['vendor_id' , 'status'] , 'products_vendor_status_idx');
+            $table->index(['vendor_id', 'status'], 'products_vendor_status_idx');
 
-            $table->index(['is_featured' , 'status'] , 'products_is_featured_status_idx');
+            $table->index(['is_featured', 'status'], 'products_is_featured_status_idx');
         });
 
-
         Schema::table('users', function (Blueprint $table) {
-            $table->index('role' , 'users_role_idx'); ;
-        }) ;
+            $table->index('role', 'users_role_idx');
+        });
     }
 
     /**

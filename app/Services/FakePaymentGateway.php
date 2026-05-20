@@ -25,8 +25,8 @@ class FakePaymentGateway implements PaymentGatewayInterface
         }
 
         return [
-            'success'        => true,
-            'transaction_id' => 'FAKE-' . uniqid(),
+            'success' => true,
+            'transaction_id' => 'FAKE-'.uniqid(),
         ];
     }
 
@@ -37,8 +37,8 @@ class FakePaymentGateway implements PaymentGatewayInterface
         }
 
         return [
-            'success'   => true,
-            'refund_id' => 'FAKE-R-' . uniqid(),
+            'success' => true,
+            'refund_id' => 'FAKE-R-'.uniqid(),
         ];
     }
 }

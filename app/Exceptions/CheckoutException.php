@@ -16,7 +16,7 @@ abstract class CheckoutException extends Exception
     {
         return response()->json([
             'message' => $this->getMessage(),
-            'code'    => $this->errorCode(),
+            'code' => $this->errorCode(),
         ], $this->statusCode());
     }
 }

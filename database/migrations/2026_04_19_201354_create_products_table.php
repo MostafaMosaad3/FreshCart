@@ -32,6 +32,6 @@ return new class extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->unsignedInteger('stock')->default(0)->after('compare_price');
             $table->index('stock');
-        }) ;
+        });
     }
 };

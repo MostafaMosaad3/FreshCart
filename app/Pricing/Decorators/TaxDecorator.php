@@ -19,6 +19,7 @@ class TaxDecorator extends PriceDecorator
     {
         $ctx = $this->next->calculate($context);
         $ctx->tax = round($ctx->subtotal * $this->rate, 2);
+
         return $ctx;
 
     }

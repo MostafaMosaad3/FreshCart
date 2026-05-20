@@ -23,7 +23,7 @@ class PlaceOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'idempotency_key' => ['sometimes' , 'string' , 'max:64'],
+            'idempotency_key' => ['sometimes', 'string', 'max:64'],
         ];
     }
 }

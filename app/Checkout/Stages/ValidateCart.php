@@ -7,16 +7,15 @@ use Illuminate\Validation\ValidationException;
 
 class ValidateCart
 {
-    public function handle(CheckoutContext $context , \Closure $next)
+    public function handle(CheckoutContext $context, \Closure $next)
     {
         $context->cart = $context->user->cart()->with('items.variant')
-            ->firstOrFail() ;
+            ->firstOrFail();
 
-        if($context->cart->items->isEmpty())
-        {
+        if ($context->cart->items->isEmpty()) {
             throw ValidationException::withMessages([
                 'cart' => 'The cart is empty.',
-            ]) ;
+            ]);
         }
 
         return $next($context);

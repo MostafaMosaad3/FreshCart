@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('line_total');
             $table->timestamps();
 
-            $table->index('order_id') ;
+            $table->index('order_id');
         });
     }
 

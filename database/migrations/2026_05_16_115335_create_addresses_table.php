@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->string('label') ;
-            $table->string('phone') ;
-            $table->string('line1') ;
+            $table->string('label');
+            $table->string('phone');
+            $table->string('line1');
             $table->string('line2')->nullable();
             $table->string('city');
             $table->string('state');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('is_default')->default(false);
             $table->timestamps();
 
-            $table->index(['user_id' , 'is_default']);
+            $table->index(['user_id', 'is_default']);
         });
     }
 

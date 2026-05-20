@@ -15,10 +15,10 @@ class VendorResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'             => $this->id,
-            'store_name'     => $this->store_name,
-            'slug'           => $this->slug,
-            'verified'       => (bool) $this->is_verified,
+            'id' => $this->id,
+            'store_name' => $this->store_name,
+            'slug' => $this->slug,
+            'verified' => (bool) $this->is_verified,
             'products_count' => $this->whenHas('products_count'),
         ];
     }

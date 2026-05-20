@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('code' , 32)->unique();
-            $table->enum('type' , ['percent' , 'fixed']);
-            $table->decimal('value' , 10 , 2);
+            $table->string('code', 32)->unique();
+            $table->enum('type', ['percent', 'fixed']);
+            $table->decimal('value', 10, 2);
             $table->timestamps();
         });
     }

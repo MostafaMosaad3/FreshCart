@@ -16,17 +16,17 @@ class StripePaymentGateway implements PaymentGatewayInterface
 
         return [
             'success' => true,
-            'transaction_id' => 'stripe_' . Str::random(16),
-        ] ;
+            'transaction_id' => 'stripe_'.Str::random(16),
+        ];
     }
 
     public function refund(string $transactionId, int $amountInCents, string $currency = 'EGY'): array
     {
-         Log::info("[Stripe] Refunded {$amountInCents} For {$currency}");
+        Log::info("[Stripe] Refunded {$amountInCents} For {$currency}");
 
-         return [
-             'success' => true,
-             'transaction_id' => 'refund_' . Str::random(16),
-         ];
+        return [
+            'success' => true,
+            'transaction_id' => 'refund_'.Str::random(16),
+        ];
     }
 }

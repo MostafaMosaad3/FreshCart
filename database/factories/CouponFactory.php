@@ -10,16 +10,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CouponFactory extends Factory
 {
-
     protected $model = Coupon::class;
 
     public function definition(): array
     {
         return [
-            'code'  => strtoupper($this->faker->unique()->bothify('???###')),
-            'type'  => 'percent',
+            'code' => strtoupper($this->faker->unique()->bothify('???###')),
+            'type' => 'percent',
             'value' => 10,
         ];
     }
-
 }

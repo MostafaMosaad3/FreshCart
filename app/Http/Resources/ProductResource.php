@@ -18,18 +18,18 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'price' => (float)$this->price ,
-            'currency' => 'EGP' ,
-            'has_discount' => $this->compare_price !== null ,
+            'price' => (float) $this->price,
+            'currency' => 'EGP',
+            'has_discount' => $this->compare_price !== null,
             'discount_percentage' => $this->compare_price
                 ? (int) round((1 - $this->price / $this->compare_price) * 100)
                 : null,
 
-            'status' => $this->status ,
+            'status' => $this->status,
             'vendor' => new VendorResource($this->whenLoaded('vendor')),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'created_at' => $this->created_at?->toISOString(),
 
-            ];
+        ];
     }
 }

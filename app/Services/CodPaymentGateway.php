@@ -7,14 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class CodPaymentGateway implements PaymentGatewayInterface
 {
-
     public function charge(int $amountInCents, string $currency = 'EGY'): array
     {
         Log::info("[COD] Order placed, payment on delivery — {$amountInCents} {$currency}");
 
         return [
-            'success'        => true,
-            'transaction_id' => 'COD-' . uniqid(),
+            'success' => true,
+            'transaction_id' => 'COD-'.uniqid(),
         ];
     }
 
@@ -24,7 +23,7 @@ class CodPaymentGateway implements PaymentGatewayInterface
 
         return [
             'success' => false,
-            'reason'  => 'COD payments cannot be refunded digitally.',
+            'reason' => 'COD payments cannot be refunded digitally.',
         ];
     }
 }

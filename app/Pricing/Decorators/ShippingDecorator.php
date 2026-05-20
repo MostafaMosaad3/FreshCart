@@ -11,7 +11,7 @@ class ShippingDecorator extends PriceDecorator
     {
         $context = $this->next->calculate($context);
         $threshold = (float) config('commerce.shipping.free_threshold', 2000);
-        $flat      = (float) config('commerce.shipping.flat_rate', 50);
+        $flat = (float) config('commerce.shipping.flat_rate', 50);
 
         $context->shipping = $context->subtotal >= $threshold ? 0.0 : $flat;
 

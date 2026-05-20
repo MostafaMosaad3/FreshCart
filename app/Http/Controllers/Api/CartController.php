@@ -13,10 +13,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-
 class CartController extends Controller
 {
-    public function show() :CartResource
+    public function show(): CartResource
     {
         $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
 
@@ -46,7 +45,7 @@ class CartController extends Controller
             } else {
                 $item = $cart->items()->create([
                     'variant_id' => $variant->id,
-                    'quantity'   => (int) $data['quantity'],
+                    'quantity' => (int) $data['quantity'],
                     'unit_price' => $variant->price,
                 ]);
             }
@@ -60,7 +59,6 @@ class CartController extends Controller
             ->response()
             ->setStatusCode(201);
     }
-
 
     public function updateQuantity(int $itemId, AddToCartRequest $request): CartItemResource
     {
@@ -90,17 +88,16 @@ class CartController extends Controller
         return new CartItemResource($item);
     }
 
-
-    public function removeItem(int $itemId) :jsonResponse
+    public function removeItem(int $itemId): JsonResponse
     {
         DB::transaction(function () use ($itemId) {
-            $item = CartItem::with('cart' , 'variant')->findOrFail($itemId);
+            $item = CartItem::with('cart', 'variant')->findOrFail($itemId);
 
-            if($item->cart->user_id != auth()->user()->id){
+            if ($item->cart->user_id != auth()->user()->id) {
                 abort(403);
             }
 
-            $item->vairant->increment('stock' , $item->quantity);
+            $item->vairant->increment('stock', $item->quantity);
             $item->delete();
         });
 
