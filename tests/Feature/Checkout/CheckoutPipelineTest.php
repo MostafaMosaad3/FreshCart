@@ -25,7 +25,7 @@ class CheckoutPipelineTest extends TestCase
         $this->actingAs($user, 'sanctum')
             ->postJson('api/checkout')
             ->assertStatus(200)
-            ->assertJsonPath('data.status', 'pending')
+            ->assertJsonPath('data.status', 'paid')
             ->assertJsonPath('data.total', '278.00');
 
         $this->assertSame(1, $user->orders()->count());

@@ -34,7 +34,7 @@ class CheckoutUsesGatewayTest extends TestCase
 
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 100]);
         $user = User::factory()->customer()->create();
-        $user->cart()->create()->items()->create([
+        $user->cart->items()->create([
             'variant_id' => $variant->id,
             'quantity' => 1,
             'unit_price' => 100,
@@ -65,7 +65,7 @@ class CheckoutUsesGatewayTest extends TestCase
 
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 100]);
         $user = User::factory()->customer()->create();
-        $user->cart()->create()->items()->create([
+        $user->cart->items()->create([
             'variant_id' => $variant->id,
             'quantity' => 1,
             'unit_price' => 100,
