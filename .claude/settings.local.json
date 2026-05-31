@@ -13,7 +13,18 @@
       "Bash(tee test_run7.log)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(chmod +x githooks/pre-commit)",
+      "Bash(git config *)",
+      "Bash(git update-index *)",
+      "Bash(git commit *)",
+      "Bash(./vendor/bin/pint)",
+      "Bash(./vendor/bin/pint app/Models/OrderItem.php app/Enums/OrderStatus.php database/factories/AddressFactory.php database/factories/OrderItemFactory.php tests/Unit/StateTransitionTest.php database/migrations/2026_05_19_125751_update_orders_for_state_pattern.php)",
+      "Bash(git stash *)",
+      "PowerShell(php artisan test --filter=QueuedWorkTest)",
+      "Bash(git s *)",
+      "Bash(git lg *)",
+      "PowerShell(php artisan test --filter='CheckoutPipelineTest|CheckoutUsesGatewayTest' 2>&1 | Select-Object -First 80)"
     ]
   }
 }

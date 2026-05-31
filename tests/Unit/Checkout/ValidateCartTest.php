@@ -12,33 +12,31 @@ use Tests\TestCase;
 
 class ValidateCartTest extends TestCase
 {
-    use RefreshDatabase ;
+    use RefreshDatabase;
 
-    public function test_passes_when_the_cart_has_items() :void
+    public function test_passes_when_the_cart_has_items(): void
     {
         $user = User::factory()->customer()->create();
         $user->cart->items()->create([
             'variant_id' => ProductVariant::factory()->create()->id,
-            'quantity' => 1 ,
-            'unit_price'=> 100
-        ]) ;
+            'quantity' => 1,
+            'unit_price' => 100,
+        ]);
 
-        $context = new CheckoutContext(user:$user->fresh(['cart.items'])) ;
-        $result = (new ValidateCart())->handle($context , fn($x) => $x) ;
+        $context = new CheckoutContext(user: $user->fresh(['cart.items']));
+        $result = (new ValidateCart)->handle($context, fn ($x) => $x);
 
-        $this->assertSame($context, $result) ;
+        $this->assertSame($context, $result);
 
     }
 
-    public function test_rejects_when_the_cart_is_empty() :void
+    public function test_rejects_when_the_cart_is_empty(): void
     {
-        $user = User::factory()->customer()->create() ;
+        $user = User::factory()->customer()->create();
 
-        $context = new CheckoutContext(user: $user) ;
+        $context = new CheckoutContext(user: $user);
 
         $this->expectException(ValidationException::class);
-        (new ValidateCart)->handle($context, fn($x) => $x);
+        (new ValidateCart)->handle($context, fn ($x) => $x);
     }
-
-
 }

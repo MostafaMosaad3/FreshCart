@@ -6,6 +6,7 @@ use App\Checkout\CheckoutContext;
 use App\Checkout\Stages\CalculatePrice;
 use App\Checkout\Stages\ClearCart;
 use App\Checkout\Stages\CreateOrder;
+use App\Checkout\Stages\FireOrderPlacedEvent;
 use App\Checkout\Stages\IdempotencyGuard;
 use App\Checkout\Stages\MarkOrderPaid;
 use App\Checkout\Stages\ProcessPayment;
@@ -43,6 +44,7 @@ class CheckoutController extends Controller
                     ProcessPayment::class,
                     CreateOrder::class,
                     MarkOrderPaid::class,
+                    FireOrderPlacedEvent::class,
                     ClearCart::class,
                 ])
                 ->thenReturn();

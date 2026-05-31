@@ -17,13 +17,13 @@ class ProductAuthorizationTest extends TestCase
         return $user->createToken('test')->plainTextToken;
     }
 
-    public function test_admin_can_update_anyProduct(): void
+    public function test_admin_can_update_any_product(): void
     {
-        $user    = User::factory()->admin()->create();
-        $vendor  = Vendor::factory()->create();
+        $user = User::factory()->admin()->create();
+        $vendor = Vendor::factory()->create();
         $product = Product::factory()->for($vendor)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($user))
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->tokenFor($user))
             ->putJson("/api/products/{$product->id}", ['name' => 'renamed by admin']);
 
         $response->assertOk();
@@ -32,11 +32,11 @@ class ProductAuthorizationTest extends TestCase
 
     public function test_vendor_can_update_their_own_product(): void
     {
-        $user    = User::factory()->vendor()->create();
-        $vendor  = Vendor::factory()->for($user)->create();
+        $user = User::factory()->vendor()->create();
+        $vendor = Vendor::factory()->for($user)->create();
         $product = Product::factory()->for($vendor)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($user))
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->tokenFor($user))
             ->putJson("/api/products/{$product->id}", ['name' => 'renamed by vendor']);
 
         $response->assertOk();
@@ -44,14 +44,14 @@ class ProductAuthorizationTest extends TestCase
 
     public function test_vendor_cannot_update_another_vendors_product(): void
     {
-        $sara        = User::factory()->vendor()->create();
-        $saraVendor  = Vendor::factory()->for($sara)->create();
+        $sara = User::factory()->vendor()->create();
+        $saraVendor = Vendor::factory()->for($sara)->create();
 
-        $omar        = User::factory()->vendor()->create();
-        $omarVendor  = Vendor::factory()->for($omar)->create();
+        $omar = User::factory()->vendor()->create();
+        $omarVendor = Vendor::factory()->for($omar)->create();
         $omarProduct = Product::factory()->for($omarVendor)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($sara))
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->tokenFor($sara))
             ->putJson("/api/products/{$omarProduct->id}", ['name' => 'renamed by Sara']);
 
         $response->assertForbidden();
@@ -62,12 +62,12 @@ class ProductAuthorizationTest extends TestCase
     {
         $customer = User::factory()->customer()->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($customer))
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->tokenFor($customer))
             ->postJson('/api/products', [
-                'name'        => 'X',
-                'slug'        => 'x-' . uniqid(),
+                'name' => 'X',
+                'slug' => 'x-'.uniqid(),
                 'description' => 'Y',
-                'price'       => 10,
+                'price' => 10,
             ]);
 
         $response->assertForbidden();
@@ -83,15 +83,15 @@ class ProductAuthorizationTest extends TestCase
 
     public function test_vendor_sees_only_their_own_products_in_index(): void
     {
-        $sara       = User::factory()->vendor()->create();
+        $sara = User::factory()->vendor()->create();
         $saraVendor = Vendor::factory()->for($sara)->create();
         Product::factory()->for($saraVendor)->count(3)->create();
 
-        $omar       = User::factory()->vendor()->create();
+        $omar = User::factory()->vendor()->create();
         $omarVendor = Vendor::factory()->for($omar)->create();
         Product::factory()->for($omarVendor)->count(2)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->tokenFor($sara))
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->tokenFor($sara))
             ->getJson('/api/products');
 
         $response->assertOk();

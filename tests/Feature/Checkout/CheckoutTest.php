@@ -5,7 +5,6 @@ namespace Tests\Feature\Checkout;
 use App\Models\ProductVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
@@ -14,13 +13,13 @@ class CheckoutTest extends TestCase
 
     public function test_creates_an_order_from_a_cart_with_items(): void
     {
-        $user    = User::factory()->customer()->create();
+        $user = User::factory()->customer()->create();
         $variant = ProductVariant::factory()->create(['stock' => 10, 'price' => 100]);
 
         $cart = $user->cart;
         $cart->items()->create([
             'variant_id' => $variant->id,
-            'quantity'   => 2,
+            'quantity' => 2,
             'unit_price' => 100,
         ]);
 
@@ -37,13 +36,13 @@ class CheckoutTest extends TestCase
     public function test_locks_variant_rows_during_checkout_to_prevent_oversell(): void
     {
         $variant = ProductVariant::factory()->create(['stock' => 1]);
-        $users   = User::factory()->count(5)->customer()->create();
+        $users = User::factory()->count(5)->customer()->create();
 
         foreach ($users as $u) {
             $cart = $u->cart;
             $cart->items()->create([
                 'variant_id' => $variant->id,
-                'quantity'   => 1,
+                'quantity' => 1,
                 'unit_price' => $variant->price,
             ]);
         }
@@ -80,14 +79,14 @@ class CheckoutTest extends TestCase
 
     public function test_generates_a_unique_order_number(): void
     {
-        $user    = User::factory()->customer()->create();
+        $user = User::factory()->customer()->create();
         $variant = ProductVariant::factory()->create(['stock' => 5, 'price' => 100]);
 
         for ($i = 0; $i < 3; $i++) {
             $cart = $user->cart()->firstOrCreate(['user_id' => $user->id]);
             $cart->items()->create([
                 'variant_id' => $variant->id,
-                'quantity'   => 1,
+                'quantity' => 1,
                 'unit_price' => 100,
             ]);
             $this->actingAs($user, 'sanctum')->postJson('/api/checkout')->assertStatus(200);

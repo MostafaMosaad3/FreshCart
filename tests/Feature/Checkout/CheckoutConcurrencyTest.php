@@ -22,20 +22,20 @@ class CheckoutConcurrencyTest extends TestCase
             $cart = $user->cart;
             $cart->items()->create([
                 'variant_id' => $variant->id,
-                'quantity'   => 1,
+                'quantity' => 1,
                 'unit_price' => $variant->price,
             ]);
         }
 
         // PHPUnit can't truly parallelize within one test — we assert the INVARIANT:
         // total successful orders ≤ initial stock, no matter the ordering.
-        $controller   = app(CheckoutController::class);
+        $controller = app(CheckoutController::class);
         $successCount = 0;
 
         foreach ($users as $user) {
             try {
                 $request = PlaceOrderRequest::create('/api/checkout', 'POST');
-                $request->setUserResolver(fn() => $user);
+                $request->setUserResolver(fn () => $user);
                 $controller->place($request);
                 $successCount++;
             } catch (\Throwable $e) {
@@ -46,5 +46,4 @@ class CheckoutConcurrencyTest extends TestCase
         $this->assertLessThanOrEqual(5, $successCount);
         $this->assertGreaterThanOrEqual(0, $variant->fresh()->stock);
     }
-
 }

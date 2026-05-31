@@ -10,31 +10,27 @@ class Cart extends Model
 {
     protected $guarded = [];
 
-    //Relations
-    public function user() :BelongsTo
+    // Relations
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function items() :HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
     }
 
-
     // Accessors
-    public function totalItems() :int
+    public function totalItems(): int
     {
         return $this->items()->sum('quantity');
     }
 
-    public function totalPrice() :string
+    public function totalPrice(): string
     {
         return number_format(
-            $this->items->sum(fn($item) => $item->unit_price * $item->quantity),
-        ) ;
+            $this->items->sum(fn ($item) => $item->unit_price * $item->quantity),
+        );
     }
-
-
-
 }

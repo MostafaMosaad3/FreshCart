@@ -5,19 +5,20 @@ namespace Tests\Feature\Pricing;
 use App\Pricing\Decorators\TaxDecorator;
 use App\Pricing\PriceCalculatorInterface;
 use App\Pricing\PriceContext;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TaxDecoratorTest extends TestCase
 {
     private function stubNext(float $subtotal = 0.0): PriceCalculatorInterface
     {
-        return new class($subtotal) implements PriceCalculatorInterface {
+        return new class($subtotal) implements PriceCalculatorInterface
+        {
             public function __construct(private float $subtotal) {}
+
             public function calculate(PriceContext $context): PriceContext
             {
                 $context->subtotal = $this->subtotal;
+
                 return $context;
             }
         };

@@ -5,8 +5,6 @@ namespace Tests\Feature\Pricing;
 use App\Pricing\Decorators\ShippingDecorator;
 use App\Pricing\PriceCalculatorInterface;
 use App\Pricing\PriceContext;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ShippingDecoratorTest extends TestCase
@@ -20,11 +18,14 @@ class ShippingDecoratorTest extends TestCase
 
     private function stubNext(float $subtotal): PriceCalculatorInterface
     {
-        return new class($subtotal) implements PriceCalculatorInterface {
+        return new class($subtotal) implements PriceCalculatorInterface
+        {
             public function __construct(private float $subtotal) {}
-            public function calculate(PriceContext $context): \App\Pricing\PriceContext
+
+            public function calculate(PriceContext $context): PriceContext
             {
                 $context->subtotal = $this->subtotal;
+
                 return $context;
             }
         };

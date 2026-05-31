@@ -6,7 +6,6 @@ use App\Models\Category;
 use DomainException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -15,7 +14,9 @@ class CategoryTreeTest extends TestCase
     use RefreshDatabase;
 
     private Category $electronics;
+
     private Category $phones;
+
     private Category $smart;
 
     protected function setUp(): void
@@ -23,18 +24,17 @@ class CategoryTreeTest extends TestCase
         parent::setUp();
 
         $this->electronics = Category::create(['name' => 'Electronics']);
-        $this->phones      = Category::create(['name' => 'Phones',      'parent_id' => $this->electronics->id]);
-        $this->smart       = Category::create(['name' => 'Smartphones', 'parent_id' => $this->phones->id]);
+        $this->phones = Category::create(['name' => 'Phones',      'parent_id' => $this->electronics->id]);
+        $this->smart = Category::create(['name' => 'Smartphones', 'parent_id' => $this->phones->id]);
     }
+
     /**
      * A basic feature test example.
      */
-
-
     public function test_load_the_full_tree_in_exactly_one_query()
     {
         DB::enableQueryLog();
-        $roots = Category::loadTree() ;
+        $roots = Category::loadTree();
         $queries = DB::getQueryLog();
 
         $this->assertCount(1, $queries);
@@ -44,7 +44,7 @@ class CategoryTreeTest extends TestCase
 
     }
 
-    public function test_assign_depth_to_every_node() :void
+    public function test_assign_depth_to_every_node(): void
     {
         $roots = Category::loadTree();
 
@@ -93,5 +93,4 @@ class CategoryTreeTest extends TestCase
 
         $this->electronics->delete();
     }
-
 }

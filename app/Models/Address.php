@@ -19,9 +19,10 @@ class Address extends Model
     protected $casts = [
         'is_default' => 'bool',
     ];
+
     protected $guarded = [];
 
-    public function user() :belongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

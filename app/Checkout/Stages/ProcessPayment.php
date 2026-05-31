@@ -16,7 +16,7 @@ class ProcessPayment
 
         $context->paymentResult = $this->gateway->charge($amountInCents, 'EGY');
 
-        if ($context->paymentResult['success']) {
+        if (! $context->paymentResult['success']) {
             throw new PaymentDeclinedException($context->paymentResult['reason'] ?? 'Payment Was Declined');
         }
 

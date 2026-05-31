@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\VendorFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vendor extends Model
 {
-    /** @use HasFactory<\Database\Factories\VendorFactory> */
+    /** @use HasFactory<VendorFactory> */
     use HasFactory;
 
     protected $guarded = [];
@@ -25,7 +26,6 @@ class Vendor extends Model
     {
         return $this->hasMany(Product::class);
     }
-
 
     // Local Scopes
     public function scopeVerified(Builder $query): Builder
@@ -47,6 +47,4 @@ class Vendor extends Model
     {
         return $query->has('products');
     }
-
-
 }

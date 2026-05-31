@@ -13,9 +13,9 @@ class AuthTest extends TestCase
     public function test_registers_a_new_user_and_returns_a_token(): void
     {
         $response = $this->postJson('/api/register', [
-            'name'                  => 'Test User',
-            'email'                 => 'test@freshcart.test',
-            'password'              => 'password123',
+            'name' => 'Test User',
+            'email' => 'test@freshcart.test',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 
@@ -28,12 +28,12 @@ class AuthTest extends TestCase
     public function test_reject_login_with_wrong_password(): void
     {
         User::factory()->create([
-            'email'    => 'test@freshcart.test',
+            'email' => 'test@freshcart.test',
             'password' => 'right_password',
         ]);
 
         $response = $this->postJson('/api/login', [
-            'email'    => 'test@freshcart.test',
+            'email' => 'test@freshcart.test',
             'password' => 'wrong_password',
         ]);
 
@@ -45,7 +45,7 @@ class AuthTest extends TestCase
 
     public function test_authenticated_user_can_access_me(): void
     {
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
         $token = $user->createToken('test_token')->plainTextToken;
 
         $this->withHeader('Authorization', "Bearer {$token}")
@@ -56,7 +56,7 @@ class AuthTest extends TestCase
 
     public function test_logout_invalidates_the_token(): void
     {
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
 
         $this->withHeader('Authorization', "Bearer {$token}")
