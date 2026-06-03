@@ -24,23 +24,22 @@ class VendorFactory extends Factory
         return [
             'user_id' => User::factory(),
             'store_name' => $storeName,
-            'slug' => Str::slug($storeName) . '-' . Str::random(4),
+            'slug' => Str::slug($storeName).'-'.Str::random(4),
             'description' => $this->faker->sentence(),
             'phone' => $this->faker->phoneNumber(),
-            'is_verified' => false ,
+            'is_verified' => false,
 
         ];
 
     }
 
-
-    public function verified():static
+    public function verified(): static
     {
-        return $this->state(fn()=> ['is_verified' => true]);
+        return $this->state(fn () => ['is_verified' => true]);
     }
 
-    public function unverified():static
+    public function unverified(): static
     {
-        return $this->state(fn()=> ['is_verified' => false]);
+        return $this->state(fn () => ['is_verified' => false]);
     }
 }

@@ -23,25 +23,37 @@ class ProductFactory extends Factory
         $name = $this->faker->words(3, true);
 
         return [
-            'vendor_id' => Vendor::factory() ,
+            'vendor_id' => Vendor::factory(),
             'name' => $name,
-            'slug' => Str::slug($name) . '-' . Str::random(3),
+            'slug' => Str::slug($name).'-'.Str::random(3),
             'description' => $this->faker->paragraph(),
-            'price'=> $this->faker->randomFloat(2, 1, 9999),
-            'status'=> 'draft' ,
+            'price' => $this->faker->randomFloat(2, 1, 9999),
+            'status' => 'draft',
             'is_featured' => false,
         ];
     }
 
-
-    public function featured() :static
+    public function featured(): static
     {
-        return $this->state(fn() => ['is_featured' => true]);
+        return $this->state(fn () => ['is_featured' => true]);
     }
 
-
-    public function active() :static
+    public function active(): static
     {
-        return $this->state(fn() => ['status' => 'active']);
+        return $this->state(fn () => ['status' => 'active']);
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Product $product) {
+            $product->variants()->create([
+                'sku' => "SKU-{$product->id}-DEFAULT",
+                'name' => 'Default',
+                'attributes' => [],
+                'price' => $product->price,
+                'stock' => fake()->numberBetween(0, 50),
+                'version' => 0,
+            ]);
+        });
     }
 }

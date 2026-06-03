@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -14,10 +13,10 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $electronics = Category::create(['name' => 'Electronics']);
-        $phones      = Category::create(['name' => 'Phones',  'parent_id' => $electronics->id]);
+        $phones = Category::create(['name' => 'Phones',  'parent_id' => $electronics->id]);
         Category::create(['name' => 'Smartphones',    'parent_id' => $phones->id]);
         Category::create(['name' => 'Feature phones', 'parent_id' => $phones->id]);
-        $laptops     = Category::create(['name' => 'Laptops', 'parent_id' => $electronics->id]);
+        $laptops = Category::create(['name' => 'Laptops', 'parent_id' => $electronics->id]);
         Category::create(['name' => 'Gaming',      'parent_id' => $laptops->id]);
         Category::create(['name' => 'Ultrabooks',  'parent_id' => $laptops->id]);
 

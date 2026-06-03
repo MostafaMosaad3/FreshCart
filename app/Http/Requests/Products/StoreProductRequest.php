@@ -21,11 +21,11 @@ class StoreProductRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name'        => trim((string) $this->name),
+            'name' => trim((string) $this->name),
             'description' => trim((string) ($this->description ?? '')),
-            'price'       => $this->price !== null ? (float) $this->price : null,
-            'status'      => $this->status ?? 'draft',
-            'slug'        => $this->slug ?? Str::slug($this->name) . '-' . Str::random(6),
+            'price' => $this->price !== null ? (float) $this->price : null,
+            'status' => $this->status ?? 'draft',
+            'slug' => $this->slug ?? Str::slug($this->name).'-'.Str::random(6),
         ]);
     }
 
@@ -37,14 +37,14 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['required', 'string', 'max:255'],
-            'slug'          => ['required', 'string', 'max:255', Rule::unique('products', 'slug')],
-            'description'   => ['nullable', 'string'],
-            'price'         => ['required', 'numeric', 'min:0'],
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique('products', 'slug')],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
             'compare_price' => ['nullable', 'numeric', 'gt:price'],
-            'status'        => ['sometimes', Rule::in(['active', 'draft', 'inactive'])],
-            'category_ids'  => ['required', 'array', 'min:1'],
-            'category_ids.*'=> ['integer', Rule::exists('categories', 'id')],
+            'status' => ['sometimes', Rule::in(['active', 'draft', 'inactive'])],
+            'category_ids' => ['required', 'array', 'min:1'],
+            'category_ids.*' => ['integer', Rule::exists('categories', 'id')],
         ];
     }
 }

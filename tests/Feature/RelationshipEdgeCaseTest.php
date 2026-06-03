@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class RelationshipEdgeCaseTest extends TestCase
@@ -22,7 +21,7 @@ class RelationshipEdgeCaseTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('db:seed');
@@ -42,6 +41,4 @@ class RelationshipEdgeCaseTest extends TestCase
         $this->assertSame(3, $sara->products_count);
         $this->assertFalse($sara->relationLoaded('products'));
     }
-
-
 }

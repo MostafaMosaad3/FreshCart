@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Models\Scopes\VendorOwnerScope;
+use Database\Factories\ProductFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProductFactory> */
+    /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
     protected $guarded = [];
@@ -28,6 +30,10 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
     // Local scopes
     public function scopeActive(Builder $query): Builder
@@ -47,12 +53,12 @@ class Product extends Model
 
     public function scopeFromVerifiedVendor(Builder $query): Builder
     {
-        return $query->whereHas('vendor', fn($q) => $q->where('is_verified', true));
+        return $query->whereHas('vendor', fn ($q) => $q->where('is_verified', true));
     }
 
     public function scopeFromUnVerifiedVerdor(Builder $query): Builder
     {
-        return $query->whereHas('vendor', fn($q) => $q->where('is_verified', false));
+        return $query->whereHas('vendor', fn ($q) => $q->where('is_verified', false));
     }
 
     public function scopeMinPrice(Builder $query, float $min): Builder
@@ -80,18 +86,14 @@ class Product extends Model
     }
 
     // Global Scope
-//    protected static function booted()
-//    {
-//        static::addGlobalScope(new VendorOwnerScope()) ;
-//    }
+    //    protected static function booted()
+    //    {
+    //        static::addGlobalScope(new VendorOwnerScope()) ;
+    //    }
 
     // Bypass The Global Scope
     protected static function allVendors(Builder $query): Builder
     {
         return $query->withOutGlobalScope(VendorOwnerScope::class);
     }
-
-
-
-
 }

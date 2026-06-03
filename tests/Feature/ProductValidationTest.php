@@ -6,13 +6,12 @@ use App\Models\Category;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProductValidationTest extends TestCase
 {
-
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -25,16 +24,17 @@ class ProductValidationTest extends TestCase
 
     public function authed(User $user)
     {
-        $token = $user->createToken('token' , [$user->role])->plainTextToken;
-        return ['authorization' => "Bearer {$token}" , 'accept' => 'application/json'];
+        $token = $user->createToken('token', [$user->role])->plainTextToken;
+
+        return ['authorization' => "Bearer {$token}", 'accept' => 'application/json'];
     }
 
-    public function test_rejects_unauthenticated_product_creation() :void
+    public function test_rejects_unauthenticated_product_creation(): void
     {
         $this->postJson('/api/products', [])->assertUnauthorized();
     }
 
-    public function test_forbids_customer_from_creating_product() :void
+    public function test_forbids_customer_from_creating_product(): void
     {
         $customer = User::factory()->create();
 
@@ -53,37 +53,36 @@ class ProductValidationTest extends TestCase
 
     }
 
-    public function test_rejects_compare_price_less_than_price() :void
+    public function test_rejects_compare_price_less_than_price(): void
     {
         $user = User::factory()->vendor()->create();
         Vendor::factory()->for($user)->create();
         $categories = Category::factory()->create();
 
-
         $this->withHeaders($this->authed($user))
             ->postJson('/api/products', [
-                'name'          => 'Test',
-                'slug'          => 'test-' . uniqid(),
-                'description'   => 'A',
-                'price'         => 100,
+                'name' => 'Test',
+                'slug' => 'test-'.uniqid(),
+                'description' => 'A',
+                'price' => 100,
                 'compare_price' => 50,
-                'category_ids'  => [$categories->id],
-            ])->assertJsonValidationErrors('compare_price');;
+                'category_ids' => [$categories->id],
+            ])->assertJsonValidationErrors('compare_price');
     }
 
     public function test_rejects_invalid_status(): void
     {
         $user = User::factory()->vendor()->create();
         Vendor::factory()->for($user)->create();
-        $cat  = Category::factory()->create();
+        $cat = Category::factory()->create();
 
         $this->withHeaders($this->authed($user))
             ->postJson('/api/products', [
-                'name'         => 'Test',
-                'slug'         => 'test-' . uniqid(),
-                'description'  => 'A',
-                'price'        => 100,
-                'status'       => 'not-a-real-status',
+                'name' => 'Test',
+                'slug' => 'test-'.uniqid(),
+                'description' => 'A',
+                'price' => 100,
+                'status' => 'not-a-real-status',
                 'category_ids' => [$cat->id],
             ])
             ->assertJsonValidationErrors('status');
@@ -93,21 +92,16 @@ class ProductValidationTest extends TestCase
     {
         $user = User::factory()->vendor()->create();
         Vendor::factory()->for($user)->create();
-        $cat  = Category::factory()->create();
+        $cat = Category::factory()->create();
 
         $this->withHeaders($this->authed($user))
             ->postJson('/api/products', [
-                'name'         => 'Test Product',
-                'slug'         => 'test-product-' . uniqid(),
-                'description'  => 'Valid description',
-                'price'        => 150,
+                'name' => 'Test Product',
+                'slug' => 'test-product-'.uniqid(),
+                'description' => 'Valid description',
+                'price' => 150,
                 'category_ids' => [$cat->id],
             ])
             ->assertCreated();
     }
-
-
-
-
-
 }

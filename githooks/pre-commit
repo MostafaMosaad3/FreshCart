@@ -1,0 +1,30 @@
+#!/bin/sh
+# Fast pre-commit checks
+
+# 1. Prevent accidental .env commits
+if git diff --cached --name-only | grep -q "^.env$"; then
+    echo "❌ Refusing to commit .env — it's in .gitignore for a reason."
+    exit 1
+fi
+
+# 2. Lint staged PHP files with Pint
+STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep "\.php$")
+if [ -n "$STAGED_PHP" ]; then
+    ./vendor/bin/pint --test $STAGED_PHP
+    if [ $? -ne 0 ]; then
+        echo "❌ Pint formatting issues. Run: ./vendor/bin/pint"
+        exit 1
+    fi
+fi
+
+# 3. Run fast tests on staged test files only
+STAGED_TESTS=$(git diff --cached --name-only --diff-filter=ACM | grep "tests/")
+if [ -n "$STAGED_TESTS" ]; then
+    php artisan test $STAGED_TESTS
+    if [ $? -ne 0 ]; then
+        echo "❌ Staged tests failed."
+        exit 1
+    fi
+fi
+
+exit 0

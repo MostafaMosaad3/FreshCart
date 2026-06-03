@@ -15,7 +15,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'vendor', 'customer'])
                 ->default('customer')
                 ->after('email')
-                ->index();;
+                ->index();
         });
     }
 

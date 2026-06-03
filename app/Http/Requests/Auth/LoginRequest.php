@@ -18,11 +18,10 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-
     public function prepareForValidation(): void
     {
         $this->merge([
-            'email' => strtolower(trim((string) $this->email))
+            'email' => strtolower(trim((string) $this->email)),
         ]);
     }
 
@@ -39,25 +38,24 @@ class LoginRequest extends FormRequest
         ];
     }
 
-
-    public function attemptLogin() : array
+    public function attemptLogin(): array
     {
-        $user = User::where('email' , $this->validated('email'))->first();
+        $user = User::where('email', $this->validated('email'))->first();
 
-        if(!$user || ! Hash::check($this->validated('password'), $user->password)){
+        if (! $user || ! Hash::check($this->validated('password'), $user->password)) {
             throw ValidationException::withMessages([
                 'email' => 'These credentials do not match our records.',
             ]);
         }
 
         $ability = match ($user->role) {
-            'admin'    => '*',
-            'vendor'   => 'vendor',
+            'admin' => '*',
+            'vendor' => 'vendor',
             'customer' => 'customer',
         };
 
         return [
-            'user'  => $user,
+            'user' => $user,
             'token' => $user->createToken('auth-token', [$ability])->plainTextToken,
         ];
     }

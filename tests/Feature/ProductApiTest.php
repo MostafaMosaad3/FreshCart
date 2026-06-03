@@ -3,19 +3,18 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProductApiTest extends TestCase
 {
-
     use RefreshDatabase;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('db:seed');
     }
+
     /**
      * A basic feature test example.
      */
@@ -26,7 +25,7 @@ class ProductApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_returns_paginated_products() : void
+    public function test_returns_paginated_products(): void
     {
         $response = $this->getJson('/api/products');
 
@@ -40,21 +39,19 @@ class ProductApiTest extends TestCase
             ]);
     }
 
-
-    public function test_includes_vendor_data_not_vendor_id() : void
+    public function test_includes_vendor_data_not_vendor_id(): void
     {
-        $response = $this->getJson('api/products') ;
+        $response = $this->getJson('api/products');
         $first = $response->json('data.0');
 
         $this->assertArrayHasKey('vendor', $first);
-        $this->assertArrayHasKey('store_name' , $first['vendor']);
-        $this->assertArrayNotHasKey('vendor_id' , $first);
+        $this->assertArrayHasKey('store_name', $first['vendor']);
+        $this->assertArrayNotHasKey('vendor_id', $first);
     }
 
-
-    public function test_only_shows_active_products() : void
+    public function test_only_shows_active_products(): void
     {
-        $response = $this->getJson('api/products') ;
+        $response = $this->getJson('api/products');
         $status = collect($response->json('data'))->pluck('status')->unique()->toArray();
 
         $this->assertSame(['active'], $status);
@@ -79,5 +76,3 @@ class ProductApiTest extends TestCase
         $response->assertNotFound();
     }
 }
-
-

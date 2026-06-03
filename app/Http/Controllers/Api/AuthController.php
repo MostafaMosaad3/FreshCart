@@ -19,18 +19,18 @@ class AuthController extends Controller
         $data = $request->validated();
 
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => $data['password'],
-            'role'     => $data['role'] ?? 'customer',
+            'role' => $data['role'] ?? 'customer',
         ]);
 
         if ($user->isVendor()) {
             Vendor::create([
-                'user_id'    => $user->id,
+                'user_id' => $user->id,
                 'store_name' => $data['store_name'],
-                'slug'       => Str::slug($data['store_name']) . '-' . Str::random(4),
-                'phone'      => $data['phone'] ?? null,
+                'slug' => Str::slug($data['store_name']).'-'.Str::random(4),
+                'phone' => $data['phone'] ?? null,
             ]);
         }
 
@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         return response()->json([
             'data' => [
-                'user'  => new UserResource($user),
+                'user' => new UserResource($user),
                 'token' => $token,
             ],
         ], 201);
@@ -47,7 +47,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         return response()->json([
             'data' => [
-                'user'  => new UserResource($user),
+                'user' => new UserResource($user),
                 'token' => $token,
             ],
         ], 200);
