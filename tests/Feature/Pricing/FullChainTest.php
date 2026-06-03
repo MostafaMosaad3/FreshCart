@@ -72,7 +72,7 @@ class FullChainTest extends TestCase
     {
         $variant = ProductVariant::factory()->create(['price' => 100]);
         $user = User::factory()->customer()->create();
-        $coupon = Coupon::factory()->create(['type' => 'percent', 'value' => 10]);
+        $coupon = Coupon::factory()->create(['strategy' => 'percentage', 'config' => ['value' => 10]]);
 
         $cart = $user->cart;
         $cart->items()->create([

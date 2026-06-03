@@ -2,11 +2,20 @@
 
 namespace App\Pricing\Decorators;
 
+use App\Pricing\Discounts\DiscountStrategyFactory;
+use App\Pricing\PriceCalculatorInterface;
 use App\Pricing\PriceContext;
 use App\Pricing\PriceDecorator;
 
 class DiscountDecorator extends PriceDecorator
 {
+    public function __construct(
+        PriceCalculatorInterface $next,
+        private DiscountStrategyFactory $factory
+    ) {
+        parent::__construct($next);
+    }
+
     public function calculate(PriceContext $context): PriceContext
     {
         $context = $this->next->calculate($context);
@@ -15,11 +24,9 @@ class DiscountDecorator extends PriceDecorator
             return $context;
         }
 
-        $context->discount = match ($context->coupon->type) {
-            'percent' => round($context->subtotal * ($context->coupon->value / 100), 2),
-            'fixed' => min((float) $context->coupon->value, $context->subtotal),
-            default => 0.0,
-        };
+        $strategy = $this->factory->make($context->coupon);
+        $context->discount = $strategy->calculate($context);
+        $context->discountDescription = $strategy->describe();
 
         return $context;
     }

@@ -21,7 +21,17 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    public function coupon(): BelongsTo
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
     // Accessors
+    public function getSubtotalAttribute(): float
+    {
+        return (float) $this->items->sum(fn ($item) => $item->unit_price * $item->quantity);
+    }
+
     public function totalItems(): int
     {
         return $this->items()->sum('quantity');

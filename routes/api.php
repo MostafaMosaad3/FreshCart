@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\OrderStatusController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CartCouponController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
@@ -36,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart/items', [CartController::class, 'addItem']);
     Route::put('/cart/items/{item}', [CartController::class, 'updateQuantity']);
     Route::delete('/cart/items/{item}', [CartController::class, 'removeItem']);
+
+    Route::post('/cart/coupon', [CartCouponController::class, 'apply']);
+    Route::delete('/cart/coupon', [CartCouponController::class, 'remove']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {

@@ -16,7 +16,8 @@ class CalculatePrice
             new PriceContext(
                 items: $context->cart->items,
                 address: $context->user->defaultAddress,
-                coupon: null,
+                coupon: $context->cart->coupon,
+                cart: $context->cart,
             )
         );
 

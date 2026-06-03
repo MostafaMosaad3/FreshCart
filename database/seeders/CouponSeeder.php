@@ -11,12 +11,12 @@ class CouponSeeder extends Seeder
     {
         Coupon::updateOrCreate(
             ['code' => 'WELCOME10'],
-            ['type' => 'percent', 'value' => 10],
+            ['strategy' => 'percentage', 'config' => ['value' => 10]],
         );
 
         Coupon::updateOrCreate(
             ['code' => 'FLAT50'],
-            ['type' => 'fixed', 'value' => 50],
+            ['strategy' => 'fixed_amount', 'config' => ['value' => 50]],
         );
     }
 }

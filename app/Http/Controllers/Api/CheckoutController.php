@@ -10,6 +10,7 @@ use App\Checkout\Stages\FireOrderPlacedEvent;
 use App\Checkout\Stages\IdempotencyGuard;
 use App\Checkout\Stages\MarkOrderPaid;
 use App\Checkout\Stages\ProcessPayment;
+use App\Checkout\Stages\RedeemCoupon;
 use App\Checkout\Stages\ReserveInventory;
 use App\Checkout\Stages\ValidateCart;
 use App\Exceptions\OptimisticLockException;
@@ -44,6 +45,7 @@ class CheckoutController extends Controller
                     ProcessPayment::class,
                     CreateOrder::class,
                     MarkOrderPaid::class,
+                    RedeemCoupon::class,
                     FireOrderPlacedEvent::class,
                     ClearCart::class,
                 ])
