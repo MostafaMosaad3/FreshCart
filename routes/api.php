@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ProductController::class, 'index']);
@@ -46,4 +47,15 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::post('/orders/{order}/ship', [OrderStatusController::class, 'markShipped']);
     Route::post('/orders/{order}/deliver', [OrderStatusController::class, 'markDelivered']);
     Route::post('/orders/{order}/cancel', [OrderStatusController::class, 'cancel']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'storeForProduct']);
+    Route::post('/vendors/{vendor}/reviews', [ReviewController::class, 'storeForVendor']);
+
+    Route::get('/products/{product}/reviews', [ReviewController::class, 'indexForProduct']);
+    Route::get('/vendors/{vendor}/reviews', [ReviewController::class, 'indexForVendor']);
+
+    Route::get('/me/reviews', [ReviewController::class, 'mine']);
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
 });

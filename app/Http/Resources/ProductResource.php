@@ -28,6 +28,13 @@ class ProductResource extends JsonResource
             'status' => $this->status,
             'vendor' => new VendorResource($this->whenLoaded('vendor')),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+
+            // Present only when the controller loaded the aggregates (detail endpoint).
+            'reviews_count' => $this->whenHas('reviews_count', fn () => (int) $this->reviews_count),
+            'rating_avg' => $this->whenHas('reviews_avg_rating', fn () => $this->reviews_avg_rating !== null
+                ? round((float) $this->reviews_avg_rating, 2)
+                : null),
+
             'created_at' => $this->created_at?->toISOString(),
 
         ];

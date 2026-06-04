@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -28,5 +31,10 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perMinute(5)->by((string) $request->input('email')),
             ];
         });
+
+        Relation::enforceMorphMap([
+            'product' => Product::class,
+            'vendor' => Vendor::class,
+        ]);
     }
 }

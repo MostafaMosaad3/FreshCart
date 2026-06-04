@@ -32,7 +32,9 @@ class ProductController extends Controller
     {
         $this->authorize('view', $product);
 
-        $product->load(['vendor', 'categories']);
+        $product->load(['vendor', 'categories'])
+            ->loadCount('reviews')              // → reviews_count (integer)
+            ->loadAvg('reviews', 'rating');     // → reviews_avg_rating (float|null), one subquery, no N+1
 
         return new ProductResource($product);
     }
