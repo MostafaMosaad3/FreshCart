@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ProductController::class, 'index']);
@@ -58,4 +59,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/me/reviews', [ReviewController::class, 'mine']);
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me/notifications', [NotificationController::class, 'index']);
+    Route::get('/me/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('/me/notifications/{id}/read', [NotificationController::class, 'markRead']);
+    Route::post('/me/notifications/read-all', [NotificationController::class, 'markAllRead']);
 });

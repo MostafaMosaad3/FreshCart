@@ -20,9 +20,11 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
-        // reviews is polymorphic: the parent is set via forProduct()/forVendor().
+        // reviews is polymorphic: defaults to a product, override via forProduct()/forVendor().
         return [
             'user_id' => User::factory(),
+            'reviewable_type' => 'product',
+            'reviewable_id' => Product::factory(),
             'rating' => $this->faker->numberBetween(1, 5),
             'comment' => $this->faker->optional(0.7)->sentence(),
         ];
