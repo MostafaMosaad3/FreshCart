@@ -24,7 +24,10 @@
       "PowerShell(php artisan test --filter=QueuedWorkTest)",
       "Bash(git s *)",
       "Bash(git lg *)",
-      "PowerShell(php artisan test --filter='CheckoutPipelineTest|CheckoutUsesGatewayTest' 2>&1 | Select-Object -First 80)"
+      "PowerShell(php artisan test --filter='CheckoutPipelineTest|CheckoutUsesGatewayTest' 2>&1 | Select-Object -First 80)",
+      "Bash(grep -v '\\\\.sample$')",
+      "Bash(git ls-remote *)",
+      "Bash(git remote *)"
     ]
   }
 }

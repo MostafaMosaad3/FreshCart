@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use App\Observers\ReviewAggregateObserver;
+use App\Observers\ReviewNotificationObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+#[ObservedBy([
+    ReviewAggregateObserver::class,
+    ReviewNotificationObserver::class,
+])]
 class Review extends Model
 {
     use HasFactory;

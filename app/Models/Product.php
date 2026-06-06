@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\VendorOwnerScope;
+use App\Observers\ProductObserver;
 use Database\Factories\ProductFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,12 +14,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+#[ObservedBy(ProductObserver::class)]
+
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'rating_avg' => 'decimal:2',
+        'reviews_count' => 'integer',
+    ];
 
     // Relations
     public function vendor(): BelongsTo
@@ -62,7 +70,7 @@ class Product extends Model
         return $query->whereHas('vendor', fn ($q) => $q->where('is_verified', true));
     }
 
-    public function scopeFromUnVerifiedVerdor(Builder $query): Builder
+    public function scopeFromUnVerifiedVendor(Builder $query): Builder
     {
         return $query->whereHas('vendor', fn ($q) => $q->where('is_verified', false));
     }
@@ -91,9 +99,14 @@ class Product extends Model
             : $query->whereRaw('1 = 0');   // no vendor → no rows (safer than returning all)
     }
 
+    //    public function ratingAverage(): float
+    //    {
+    //        return $this->reviews->avg('rating');
+    //    }
+
     public function ratingAverage(): float
     {
-        return $this->reviews->avg('rating');
+        return (float) $this->rating_avg;
     }
 
     public function reviewsCount(): int
@@ -108,15 +121,15 @@ class Product extends Model
     //    }
 
     // Bypass The Global Scope
-    protected static function allVendors(Builder $query): Builder
-    {
-        return $query->withOutGlobalScope(VendorOwnerScope::class);
-    }
+    //    protected static function allVendors(Builder $query): Builder
+    //    {
+    //        return $query->withOutGlobalScope(VendorOwnerScope::class);
+    //    }
 
-    protected static function booted(): void
-    {
-        static::deleting(function (Product $product) {
-            $product->reviews()->delete();
-        });
-    }
+    //    protected static function booted(): void
+    //    {
+    //        static::deleting(function (Product $product) {
+    //            $product->reviews()->delete();
+    //        });
+    //    }
 }

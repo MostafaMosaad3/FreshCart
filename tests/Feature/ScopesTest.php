@@ -48,7 +48,7 @@ class ScopesTest extends TestCase
         Product::factory()->for($verified)->create();
         Product::factory()->for($unverified)->create();
 
-        $this->assertSame(1, Product::fromUnVerifiedVerdor()->count());
+        $this->assertSame(1, Product::fromUnVerifiedVendor()->count());
     }
 
     public function test_vendor_verified_scope_returns_only_verified(): void
