@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 
 #[ObservedBy(ProductObserver::class)]
 
@@ -21,11 +23,14 @@ class Product extends Model
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
+    use Searchable;
+
     protected $guarded = [];
 
     protected $casts = [
         'rating_avg' => 'decimal:2',
         'reviews_count' => 'integer',
+        'tags' => 'array',
     ];
 
     // Relations
@@ -112,6 +117,39 @@ class Product extends Model
     public function reviewsCount(): int
     {
         return $this->reviews()->count();
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'category_names' => $this->categories->pluck('name')->all(),
+            'category_ids' => $this->categories->pluck('id')->all(),
+            'vendor_name' => $this->vendor->store_name,
+            'vendor_id' => (int) $this->vendor_id,
+            'price' => (float) $this->price,
+            'rating_avg' => (float) $this->rating_avg,
+            'in_stock' => $this->stock > 0,
+            'tags' => $this->tags ?? [],
+            'created_at' => $this->created_at->timestamp,
+        ];
+    }
+
+    public function makeSearchableUsing(Collection $models): Collection
+    {
+        return $models->load('categories', 'vendor');
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function searchableAs(): string
+    {
+        return 'products_'.app()->environment();
     }
 
     // Global Scope

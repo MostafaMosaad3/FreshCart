@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ProductController::class, 'index']);
@@ -67,3 +68,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/me/notifications/{id}/read', [NotificationController::class, 'markRead']);
     Route::post('/me/notifications/read-all', [NotificationController::class, 'markAllRead']);
 });
+
+Route::get('/search/products', [SearchController::class, 'products']);
+Route::get('/search/products/facets', [SearchController::class, 'facets']);

@@ -20,7 +20,10 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->decimal('compare_price', 10, 2)->nullable();
             $table->enum('status', ['active', 'draft', 'inactive'])->default('draft');
+            $table->unsignedInteger('stock')->default(0)->after('compare_price');
             $table->timestamps();
+
+            $table->index('stock');
         });
     }
 
@@ -29,9 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->unsignedInteger('stock')->default(0)->after('compare_price');
-            $table->index('stock');
-        });
+        Schema::dropIfExists('products');
     }
 };
