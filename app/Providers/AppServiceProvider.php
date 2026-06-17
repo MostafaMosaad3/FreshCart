@@ -8,6 +8,7 @@ use App\Models\Vendor;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -38,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
             'vendor' => Vendor::class,
             'user' => User::class,
         ]);
+
+        Gate::define('viewAdmin', fn (User $user) => $user->isAdmin());
     }
 }

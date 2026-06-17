@@ -18,7 +18,9 @@ if [ -n "$STAGED_PHP" ]; then
 fi
 
 # 3. Run fast tests on staged test files only
-STAGED_TESTS=$(git diff --cached --name-only --diff-filter=ACM | grep "tests/")
+#    Match *Test.php suites only — abstract base/helper classes (e.g. *TestCase.php)
+#    are not runnable on their own and make `artisan test <file>` error.
+STAGED_TESTS=$(git diff --cached --name-only --diff-filter=ACM | grep -E "tests/.*Test\.php$")
 if [ -n "$STAGED_TESTS" ]; then
     php artisan test $STAGED_TESTS
     if [ $? -ne 0 ]; then

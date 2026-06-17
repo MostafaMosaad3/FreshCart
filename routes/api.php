@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Api\Admin\OrderStatusController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
@@ -71,3 +72,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/search/products', [SearchController::class, 'products']);
 Route::get('/search/products/facets', [SearchController::class, 'facets']);
+
+Route::middleware(['auth:sanctum', 'can:viewAdmin'])->prefix('admin/analytics')->group(function () {
+    Route::get('/top-products-per-category', [AnalyticsController::class, 'topProductsPerCategory']);
+    Route::get('/vendor-monthly-sales/{vendorId}', [AnalyticsController::class, 'vendorMonthlySales']);
+    Route::get('/rating-trend/{type}/{id}', [AnalyticsController::class, 'ratingTrend']);
+    Route::get('/pricing-quartiles/{vendorId}', [AnalyticsController::class, 'pricingQuartiles']);
+});
+
+Route::middleware(['auth:sanctum', 'can:viewAdmin'])
+    ->prefix('admin/analytics')
+    ->group(function () {
+        // W7D2 routes ...
+
+        Route::get('/vendor-health/{vendorId}', [AnalyticsController::class, 'vendorHealthReport']);
+        Route::get('/category-performance-tree', [AnalyticsController::class, 'categoryPerformanceTree']);
+        Route::get('/customer-insights/{userId}', [AnalyticsController::class, 'customerInsights']);
+    });

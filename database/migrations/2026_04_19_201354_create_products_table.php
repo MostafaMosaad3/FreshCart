@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->decimal('compare_price', 10, 2)->nullable();
             $table->enum('status', ['active', 'draft', 'inactive'])->default('draft');
-            $table->unsignedInteger('stock')->default(0)->after('compare_price');
+            $table->unsignedInteger('stock')->default(0);
             $table->timestamps();
 
             $table->index('stock');
