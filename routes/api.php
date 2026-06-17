@@ -79,3 +79,13 @@ Route::middleware(['auth:sanctum', 'can:viewAdmin'])->prefix('admin/analytics')-
     Route::get('/rating-trend/{type}/{id}', [AnalyticsController::class, 'ratingTrend']);
     Route::get('/pricing-quartiles/{vendorId}', [AnalyticsController::class, 'pricingQuartiles']);
 });
+
+Route::middleware(['auth:sanctum', 'can:viewAdmin'])
+    ->prefix('admin/analytics')
+    ->group(function () {
+        // W7D2 routes ...
+
+        Route::get('/vendor-health/{vendorId}', [AnalyticsController::class, 'vendorHealthReport']);
+        Route::get('/category-performance-tree', [AnalyticsController::class, 'categoryPerformanceTree']);
+        Route::get('/customer-insights/{userId}', [AnalyticsController::class, 'customerInsights']);
+    });

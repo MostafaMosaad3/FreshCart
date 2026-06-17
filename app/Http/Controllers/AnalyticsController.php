@@ -38,4 +38,21 @@ class AnalyticsController extends Controller
     {
         return $this->repo->pricingQuartiles($vendorId);
     }
+
+    public function vendorHealthReport(int $vendorId): ?object
+    {
+        return $this->repo->vendorHealthReport($vendorId)
+            ?? abort(404, 'Vendor not found or has no activity');
+    }
+
+    public function categoryPerformanceTree()
+    {
+        return $this->repo->categoryPerformanceTree();
+    }
+
+    public function customerInsights(int $userId)
+    {
+        return $this->repo->customerInsights($userId)
+            ?? abort(404, 'User not found or has no orders');
+    }
 }
