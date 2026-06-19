@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\ReviewAggregateObserver;
+use App\Observers\ReviewCacheObserver;
 use App\Observers\ReviewNotificationObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 #[ObservedBy([
     ReviewAggregateObserver::class,
     ReviewNotificationObserver::class,
+    ReviewCacheObserver::class,
 ])]
 class Review extends Model
 {

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\AnalyticsRepository;
+use App\Repositories\AnalyticsRepositoryContract;
 use Illuminate\Http\Request;
 
 class AnalyticsController extends Controller
 {
-    public function __construct(private AnalyticsRepository $repo) {}
+    public function __construct(private AnalyticsRepositoryContract $repo) {}
 
     public function topProductsPerCategory(Request $request)
     {

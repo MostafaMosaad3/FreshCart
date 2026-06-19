@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
  * derived through order_items -> product_variants -> products.vendor_id, and a
  * product's category link lives in the `category_product` pivot.
  */
-class AnalyticsRepository
+class AnalyticsRepository implements AnalyticsRepositoryContract
 {
     // Week 7 Day 2 — window functions
 

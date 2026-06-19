@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
+use App\Repositories\AnalyticsRepository;
+use App\Repositories\AnalyticsRepositoryContract;
+use App\Repositories\CachedAnalyticsRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -27,6 +30,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->bind(AnalyticsRepositoryContract::class, function () {
+            return new CachedAnalyticsRepository(new AnalyticsRepository);
+        });
+
+        RateLimiter::for('admin-analytics', function ($request) {
+            return Limit::perMinute(30)->by($request->user()->id);
+        });
+
         RateLimiter::for('login', function (Request $request) {
             return [
                 Limit::perMinute(5)->by($request->ip()),
