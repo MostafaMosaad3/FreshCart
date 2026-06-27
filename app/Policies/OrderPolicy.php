@@ -7,6 +7,15 @@ use App\Models\User;
 
 class OrderPolicy
 {
+    /**
+     * Admins manage every order through the Filament panel; everyone else
+     * falls through to the per-ability checks below (all deny by default).
+     */
+    public function before(?User $user, string $ability): ?bool
+    {
+        return $user?->isAdmin() ? true : null;
+    }
+
     public function transition(User $user, Order $order): bool
     {
         return $user->isAdmin() === true;

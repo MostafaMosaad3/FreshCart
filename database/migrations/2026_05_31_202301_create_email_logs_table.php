@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('email_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('event_class');
-            $table->string('subject_type')->nullable();
+            $table->string('event_class', 100);
+            $table->string('subject_type', 60)->nullable();
             $table->unsignedBigInteger('subject_id')->nullable();
-            $table->string('listener');
+            $table->string('listener', 60);
             $table->timestamp('sent_at');
             $table->timestamps();
 
