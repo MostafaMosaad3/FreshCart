@@ -12,20 +12,23 @@ class RatingTrendTest extends AnalyticsTestCase
     {
         $product = Product::factory()->create();
 
-        // Jan: avg 5.0 (two reviews, distinct users via the factory).
+        $first = now()->subMonth()->startOfMonth()->addDays(9);
+        $second = now()->startOfMonth();
+
+        // First month: avg 5.0 (two reviews, distinct users via the factory).
         Review::factory()->count(2)->forProduct($product)->create([
-            'rating' => 5, 'created_at' => '2026-01-10',
+            'rating' => 5, 'created_at' => $first->toDateString(),
         ]);
 
-        // Feb: avg 3.0
+        // Second month: avg 3.0
         Review::factory()->count(2)->forProduct($product)->create([
-            'rating' => 3, 'created_at' => '2026-02-10',
+            'rating' => 3, 'created_at' => $second->toDateString(),
         ]);
 
         $res = app(AnalyticsRepository::class)->ratingTrend('product', $product->id, 6);
 
-        $jan = $res->firstWhere('month', '2026-01');
-        $feb = $res->firstWhere('month', '2026-02');
+        $jan = $res->firstWhere('month', $first->format('Y-m'));
+        $feb = $res->firstWhere('month', $second->format('Y-m'));
 
         $this->assertSame(5.0, (float) $jan->rating_avg);
         $this->assertNull($jan->prev_rating);          // first month, no previous

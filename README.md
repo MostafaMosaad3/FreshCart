@@ -1,5 +1,9 @@
 # FreshCart — Multi-Vendor E-Commerce Platform
 
+[![Tests](https://github.com/MostafaMosaad3/FreshCart/actions/workflows/tests.yml/badge.svg)](https://github.com/MostafaMosaad3/FreshCart/actions/workflows/tests.yml)
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+
 A multi-vendor marketplace API built with **Laravel 12** and **PHP 8.2**. Vendors manage their own catalogs while customers browse, search, and check out across all stores — with fast full-text search, nested categories, coupons, product variants, and reviews.
 
 ## Features
