@@ -17,9 +17,9 @@ class VendorMonthlySalesTest extends AnalyticsTestCase
         $vendor = Vendor::factory()->create();
         $variant = $this->variantForVendor($vendor);
 
-        $this->sale($variant, 1000, '2026-01-15');
-        $this->sale($variant, 500, '2026-02-15');
-        $this->sale($variant, 200, '2026-03-15');
+        $this->sale($variant, 1000, now()->subMonths(2)->startOfMonth()->addDays(14)->toDateString());
+        $this->sale($variant, 500, now()->subMonth()->startOfMonth()->addDays(14)->toDateString());
+        $this->sale($variant, 200, now()->startOfMonth()->toDateString());
 
         $res = app(AnalyticsRepository::class)->vendorMonthlySales($vendor->id, 6);
 
